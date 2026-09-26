@@ -29,6 +29,7 @@ from aiohttp import web
 from dotenv import load_dotenv
 
 import config
+from blocks import bus
 
 HERE = Path(__file__).resolve().parent
 SR = 16000
@@ -101,6 +102,10 @@ class VoicePipeline:
         self.last_lag_warn = 0.0
 
         self.source = open_source(args)      # 장치가 틀렸으면 모델 로딩 전에 바로 알려줌
+        from denoise import build_denoiser
+        self.denoiser = build_denoiser(getattr(config, "AUDIO_DENOISE", "off"), SR,
+                                       getattr(config, "AUDIO_DENOISE_STRENGTH", 1.0))
+        self.energy_gate = getattr(config, "VAD_ENERGY_GATE", 0.0)
         self.segmenter = Segmenter(
             SileroVAD(cache_dir=str(HERE / "models")), self._on_segment,
             threshold=config.VAD_THRESHOLD,
@@ -110,15 +115,26 @@ class VoicePipeline:
             pad_ms=config.VAD_PAD_MS,
         )
         self.stt = KoreanSTT(config)
+        self.streaming = getattr(config, "STT_STREAMING", False)
+        self.partial_interval = getattr(config, "STT_PARTIAL_INTERVAL", 2.5)
+        self.partial_samples = int(self.partial_interval * SR)
+        self.last_partial = 0.0
+        self.buf_lock = threading.Lock()
+        self.speech_buf = np.zeros(0, np.float32)
 
     def _on_audio(self, chunk):            # 오디오 스레드
         try:
-            self.audio_q.put_nowait(chunk)
+            chunk = self.denoiser.process(chunk)   # 잡음 제거 전처리 (VAD 앞)
+            if len(chunk):
+                self.audio_q.put_nowait(chunk)
         except queue.Full:
             pass
 
     def _on_segment(self, audio):          # VAD 스레드
         self.seg_q.put((audio, time.monotonic()))
+        if self.streaming:
+            with self.buf_lock:
+                self.speech_buf = np.zeros(0, np.float32)
 
     def _vad_loop(self):
         started, heard, warned = time.monotonic(), False, False
@@ -135,20 +151,30 @@ class VoicePipeline:
             if not heard and np.abs(chunk).max() > 1e-4:
                 heard = True
                 print("[오디오] 소리 들어오는 중 ✓")
+            if self.energy_gate and float(np.sqrt(np.mean(chunk.astype(np.float64) ** 2))) < self.energy_gate:
+                continue                                # 너무 작은 소리는 VAD 생략 (CPU 절약, 오검출 감소)
             self.segmenter.feed(chunk)
+            if self.streaming:
+                with self.buf_lock:
+                    self.speech_buf = np.concatenate([self.speech_buf, chunk])
 
     def _stt_loop(self):
         gap = np.zeros(int(0.15 * SR), np.float32)
         while not self.stop_ev.is_set():
+            segs = []
             try:
-                segs = [self.seg_q.get(timeout=0.5)]
+                segs = [self.seg_q.get(timeout=0.3)]
+                while True:                 # 밀린 구간이 있으면 한 번에 묶어서 인식
+                    try:
+                        segs.append(self.seg_q.get_nowait())
+                    except queue.Empty:
+                        break
             except queue.Empty:
+                pass
+            if not segs:
+                if self.streaming:
+                    self._maybe_partial()
                 continue
-            while True:                     # 밀린 구간이 있으면 한 번에 묶어서 인식
-                try:
-                    segs.append(self.seg_q.get_nowait())
-                except queue.Empty:
-                    break
             keep, total = [], 0
             for audio, t in reversed(segs):  # 너무 밀렸으면 최신 것 위주로
                 if keep and total + len(audio) > MAX_MERGE_SEC * SR:
@@ -170,6 +196,24 @@ class VoicePipeline:
             if text:
                 self.on_text(text, {"lag": lag, "sec": len(merged) / SR})
 
+    def _maybe_partial(self):
+        """말하는 중에도 주기적으로 지금까지 들린 해설을 중간 인식 (자막+골 조기감지, 최종 인식과 별개)"""
+        now = time.monotonic()
+        if now - self.last_partial < self.partial_interval:
+            return
+        with self.buf_lock:
+            buf = self.speech_buf.copy()
+        if len(buf) < self.partial_samples:
+            return
+        try:
+            text = self.stt.transcribe(buf)
+        except Exception as e:
+            print(f"[STT] 중간 인식 오류: {e}")
+            return
+        self.last_partial = now
+        if text:
+            self.on_text(text, {"partial": True, "lag": 0.0, "sec": len(buf) / SR})
+
     def start(self):
         threading.Thread(target=self._vad_loop, name="vad", daemon=True).start()
         threading.Thread(target=self._stt_loop, name="stt", daemon=True).start()
@@ -183,54 +227,20 @@ class VoicePipeline:
             pass
 
 
-ROLE = {"GK": "골키퍼", "DF": "수비", "MF": "미드필더", "FW": "공격"}
-
-
-def _roles(formation, n):
-    """포메이션 줄 → 선수별 포지션 (GK / DF / MF / FW). 선발 순서는 골키퍼 → 수비 → … → 공격, 줄 안은 왼쪽부터"""
-    rows = [1] + [int(x) for x in re.findall(r"\d", formation or "")]
-    out = []
-    for r, cnt in enumerate(rows):
-        role = "GK" if r == 0 else "DF" if r == 1 else "FW" if r == len(rows) - 1 else "MF"
-        out += [role] * cnt
-    return (out + ["?"] * n)[:n]
-
-
-def lineup_info():
-    """lineup.json → (음성 인식 힌트용 이름 목록, 채팅 AI에게 줄 경기 정보 전부)"""
-    data = json.loads((HERE / "lineup.json").read_text(encoding="utf-8"))
-    home, away = data.get("home") or {}, data.get("away") or {}
+def lineup_names(data) -> list:
+    """lineup.json → 음성 인식 힌트용 이름 목록 (경기 정보 텍스트는 chat_brain.py 가 bus "lineup" 로 직접 구성)"""
     ko, en = [], []
-    comp = f"{data.get('competition') or data.get('league', '')} {data.get('kickoff') or data.get('round', '')}".strip()
-    text = [f"{comp} · 홈 {home.get('name', '?')} vs 원정 {away.get('name', '?')}".strip(" ·")]
     for side in ("home", "away"):
-        team = data.get(side) or {}
-        players = team.get("players") or []
+        players = (data.get(side) or {}).get("players") or []
         ko += [p[1] for p in players if len(p) > 1]
         en += [p[2] for p in players if len(p) > 2]
-        if not players:
-            text.append(f"- {team.get('name', '')} ({'홈' if side == 'home' else '원정'}): 선발 아직 모름")
-            continue
-        roles = _roles(team.get("formation"), len(players))
-        groups = {}
-        for role, p in zip(roles, players):
-            name = " / ".join(str(x) for x in p[1:3] if x)
-            groups.setdefault(role, []).append(f"{p[0]}번 {name}")
-        body = " | ".join(f"{ROLE.get(r, r)}: " + ", ".join(v) for r, v in groups.items())
-        text.append(f"- {team.get('name', '')} ({'홈' if side == 'home' else '원정'}, 선발 11명, 포메이션 {team.get('formation') or '?'}"
-                    f", 수비·미드·공격 줄은 왼쪽→오른쪽 순): {body}")
-    # 힌트는 223토큰에서 뒤가 잘리므로 해설에 실제로 나오는 한국어 이름을 앞에
-    return list(config.PLAYER_NAMES) + ko + en, "\n".join(text)
+    # 힌트는 잘리므로 해설에 실제로 나오는 한국어 이름을 앞에
+    return list(config.PLAYER_NAMES) + ko + en
 
 
-async def _refresh_audience(audience, publish):
-    await audience.refresh()
-    if audience.count:
-        publish({"type": "viewers", "count": audience.count})
-
-
-async def watch_lineup(brain, holder, audience=None, publish=None):
-    """lineup.json 이 바뀌면 (자동 매핑·직접 수정 모두) 음성 인식 힌트와 채팅 AI에 반영"""
+async def watch_lineup(holder):
+    """lineup.json 이 바뀌면 (자동 매핑·직접 수정 모두) 음성 인식 힌트에 반영하고 bus "lineup" 로 알림
+    (chat_brain·audience 는 각자 이 이벤트를 구독해서 채팅·시청자 수에 반영함)"""
     path, seen, applied_stt = HERE / "lineup.json", None, False
     while True:
         await asyncio.sleep(0 if seen is None else 2)
@@ -242,17 +252,16 @@ async def watch_lineup(brain, holder, audience=None, publish=None):
         if mtime == seen and (applied_stt or not stt):
             continue
         try:
-            names, text = lineup_info()
+            data = json.loads(path.read_text(encoding="utf-8"))
         except Exception as e:                  # 직접 고치다 JSON 문법이 틀린 경우 등
             print(f"[라인업] lineup.json 읽기 실패: {e}")
             seen = mtime
             continue
+        names = lineup_names(data)
         if seen is not None and mtime != seen:
             print(f"[라인업] 이름 {len(names)}개를 음성 인식·채팅에 반영")
         seen = mtime
-        brain.set_lineup(text)
-        if audience and brain.ready:            # 경기가 바뀌었으면 팬 수 → 시청자 수·팬 구성 (Haiku, 백그라운드)
-            asyncio.create_task(_refresh_audience(audience, publish))
+        bus.emit("lineup", data)
         if stt:
             stt.set_names(names)
             applied_stt = True
@@ -302,15 +311,17 @@ async def welcome_members(book, brain, publish):
 
 
 async def amain(args, ui=None):
-    from audience import END, GOAL
+    from audience import scenes
     from chat_brain import ChatBrain
-    from viewers import ViewerBook
+    from viewers import Viewers
 
     loop = asyncio.get_running_loop()
+    bus.bind(loop)                              # 다른 스레드에서 emit 해도 이 루프에서 처리
     if ui:                                      # 창을 닫으면 여기도 정리하고 끝냄
         me = asyncio.current_task()
         ui.on_close = lambda: loop.call_soon_threadsafe(me.cancel)
     hub = Hub(ui)
+    bus.on("viewers", lambda n: hub.publish({"type": "viewers", "count": n}))
     runner = web.AppRunner(build_app(hub))
     await runner.setup()
     try:                                        # 서버부터 (실패하면 라이브 회차가 안 올라가게)
@@ -319,7 +330,7 @@ async def amain(args, ui=None):
         await runner.cleanup()
         raise StartupError(_port_busy_message(args.port))
 
-    book = ViewerBook(config)
+    book = Viewers(config)
     await book.start_show()                    # 지난 방송 채팅 기록 → 단골 갱신 (Haiku 1회)
     brain = ChatBrain(config, hub.publish, book)
     url = f"http://{config.HOST}:{args.port}/"
@@ -327,14 +338,14 @@ async def amain(args, ui=None):
     print(f"[라인업]   {url}lineup?transparent=1   (lineup.json 수정하면 자동 반영)\n")
 
     def handle_text(text, meta):
+        if meta.get("partial"):                       # 중간 인식: 자막 표시 + 골 멘트 조기 감지만
+            print(f"🎙  {text}   (중간 인식)")
+            hub.publish({"type": "commentary", "text": text, "partial": True})
+            if "goal" in scenes(text):
+                bus.emit("goal_cue")                # 골 멘트를 몇 초 먼저 잡아 떼창 시작
+            return
         print(f"🎙  {text}   (말 끝난 뒤 {meta['lag']:.1f}s)" if meta["lag"] else f"🎙  {text}")
-        brain.add_commentary(text)
-        if audience:
-            audience.on_commentary(text)        # 골·하프타임·종료 등 → 시청자 수 변동
-        if GOAL.search(text):
-            tracker.cue()                       # 골 멘트 → 스코어보드로 득점 팀·득점자 확인
-        if END.search(text):
-            tracker.on_end_commentary()         # 경기 종료 멘트 → 경기 화면이 끝나면 기록 저장
+        bus.emit("commentary", text)            # chat_brain·audience 가 각자 구독 (채팅 반응, 골·종료 감지)
         hub.publish({"type": "commentary", "text": text})
 
     def on_text(text, meta):                # 어느 스레드에서 불려도 안전하게
@@ -393,7 +404,7 @@ async def amain(args, ui=None):
             left = [steps[k] for k, v in (sides or {}).items() if not v]
             print(f"[대기] 남은 것: {', '.join(left)}" + (f"  ← {req}" if req else ""))
 
-    def on_scanned(who, changed, matchday):     # 화면 감시 스레드 → 이벤트 루프
+    def on_scanned(who, changed, matchday):     # bus "screen_read" (화면 감시 스레드가 emit → 이 루프에서 실행)
         if who == "match":
             st["matchday"] = matchday
             if changed:
@@ -404,65 +415,55 @@ async def amain(args, ui=None):
                 print("[대기] 새 경기 → 새 라인업을 읽을 때까지 채팅을 멈춥니다")
         got[who] = True
         if all(got.values()) and audience:
-            asyncio.create_task(_refresh_audience(audience, hub.publish))
+            asyncio.create_task(audience.refresh())
         update()
 
-    def on_live(live):
+    def on_live(live):                          # bus "live" (goals·audience·chat_brain 도 각자 구독함)
         st["live"] = live
-        tracker.on_live(live)
         if live and not all(got.values()):
             print("[송출] 킥오프 감지 → 지금 lineup.json 라인업으로 채팅 시작")
             if audience:
-                asyncio.create_task(_refresh_audience(audience, hub.publish))
+                asyncio.create_task(audience.refresh())
         if not live:
             st["paused"] = False
-            brain.minute = None
-        if live and audience and audience.phase == "pre":
-            audience.phase = "live"             # 킥오프 멘트를 못 알아들어도 경기가 시작됐으면
         update()
 
-    def on_pause(p):
+    def on_pause(p):                            # bus "pause"
         st["paused"] = p
         update()
 
-    from goals import GoalTracker
-    tracker = GoalTracker(config, brain, lambda: watcher.scoreboard() if watcher else None)
-    brain.on_goal = tracker.cue                 # 채팅 AI 가 {"event":"goal"} 을 내면
-
-    def on_clock(minute):
-        brain.minute = minute                  # 스코어보드 시계 → 채팅 AI 에게 경기 시간
-        tracker.on_minute(minute)
-
-    def on_status(status):
+    def on_status(status):                      # bus "game"
         st["game"] = status
         update()
+
+    from goals import GoalTracker
+    tracker = GoalTracker(config, lambda: watcher.board if watcher else None)
 
     def force_start():
         if not brain.ready:
             st["forced"] = True
             print("[송출] 직접 시작 (대기 건너뜀)")
             if audience:
-                asyncio.create_task(_refresh_audience(audience, hub.publish))
+                asyncio.create_task(audience.refresh())
             update()
 
-    if ui:                                      # 채팅 창 우클릭 → '채팅 바로 시작'
-        ui.on_force_start = lambda: loop.call_soon_threadsafe(force_start)
+    bus.on("force_start", force_start)          # 채팅 창 우클릭 → '채팅 바로 시작' (rescan 은 screen_watch 가 자체 구독)
     brain.ready = not gate                      # 시작할 때 '채팅 멈춤'이 찍히지 않게
     update()
 
     holder = {}
-    lineup_task = asyncio.create_task(watch_lineup(brain, holder, audience, hub.publish))
+    lineup_task = asyncio.create_task(watch_lineup(holder))
     watcher = None
     if watching:
         import screen_watch
         if ui:                                  # 캡처하는 순간에만 우리 창을 캡처에서 뺌 (화면에는 그대로)
             screen_watch.EXCLUDE_FROM_CAPTURE = ui.hwnds()
-        call = lambda f: (lambda *a: loop.call_soon_threadsafe(f, *a))
-        watcher = screen_watch.ScreenWatcher(on_scanned=call(on_scanned), on_live=call(on_live), on_status=call(on_status),
-                                             on_pause=call(on_pause), on_clock=call(on_clock), on_hud=call(tracker.on_hud))
+        bus.on("screen_read", on_scanned)
+        bus.on("live", on_live)
+        bus.on("pause", on_pause)
+        bus.on("game", on_status)
+        watcher = screen_watch.ScreenWatcher()
         watcher.start()
-        if ui:                                  # 채팅 창 우클릭 → '라인업 다시 읽기'
-            ui.on_rescan = watcher.forget
 
     pipeline = None
     if args.text:
@@ -478,7 +479,7 @@ async def amain(args, ui=None):
         tasks = [hub.run(), brain.run(), brain.emitter(), lineup_task, autosave(book),
                  welcome_members(book, brain, hub.publish), PromptCoach(config, brain).run(), tracker.run()]
         if audience:
-            tasks.append(audience.ticker(hub.publish))
+            tasks.append(audience.ticker())
         await asyncio.gather(*tasks)
     finally:
         book.save()

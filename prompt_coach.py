@@ -114,8 +114,8 @@ class PromptCoach:
 
         drop = {i - 1 for i in res["remove_rules"] if 1 <= i <= len(rules)}
         kept = [r for i, r in enumerate(rules) if i not in drop]
-        added = [r.strip()[:80] for r in res["add_rules"][:3] if r.strip() and r.strip() not in kept]
-        new = (kept + added)[-self.cfg.COACH_MAX_RULES:]  # 너무 많으면 오래된 것부터
+        added = [r.strip()[:80] for r in res["add_rules"][:3] if r.strip()]
+        new = prompts.prune_rules(kept + added, self.cfg.COACH_MAX_RULES)  # 의미 중복 규칙 합치기
         if new != rules:
             prompts.save_learned(new)
         with LOG.open("a", encoding="utf-8") as f:

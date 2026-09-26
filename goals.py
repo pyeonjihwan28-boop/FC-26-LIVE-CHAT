@@ -156,6 +156,16 @@ class GoalTracker:
         img = self.get_scoreboard()
         if img is None:
             return None
+        if getattr(self.cfg, "SCOREBOARD_LOCAL_OCR", False):
+            away = text.norm((store.load("lineup.json", {}).get("away") or {}).get("short", ""))
+            try:
+                from scoreboard_ocr import read_scoreboard
+                loop = asyncio.get_running_loop()
+                res = await loop.run_in_executor(None, read_scoreboard, img, away)
+            except Exception:
+                res = None
+            if res is not None:
+                return res                          # 로컬 OCR로 읽음 → Haiku 호출 안 함 (비용 0)
         try:
             r = await ai.ask_async(tpl.fill("SCAN_SCOREBOARD"), SCORE_SCHEMA, image=img, max_tokens=150, fmt="PNG")
         except Exception as e:

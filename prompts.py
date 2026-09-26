@@ -73,3 +73,9 @@ def save_learned(rules: list[str]):
         tmp = TEMPLATE.with_suffix(".tmp")
         tmp.write_text(text, encoding="utf-8")
         os.replace(tmp, TEMPLATE)
+
+
+def prune_rules(rules, max_rules=15, sim=0.72):
+    """blocks.prune_rules 위임 (순환 임포트 방지로 안에서 import)"""
+    from blocks import prune_rules as _prune
+    return _prune(rules, max_rules, sim)

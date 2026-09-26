@@ -3,6 +3,10 @@ FC 26 가상 라이브 채팅 — 설정 (튜닝은 대부분 이 파일만)
 """
 from blocks import store as _store
 
+# ── 오버레이 서버 (main.py) ──────────────────────────────────────────
+HOST = "127.0.0.1"
+PORT = 8765
+
 # ── 방송 배경: 시청자들은 '스포츠 채널 유튜브의 실제 축구 생중계 라이브'로 보고 있음 ─────────
 CHANNEL_NAME = "스포츠TV"      # 중계 채널 이름
 PROGRAM_NAME = ""              # 중계 프로그램 이름 (비우면 "축구 생중계")
@@ -66,8 +70,22 @@ VAD_MIN_SILENCE_MS = 450
 VAD_MAX_SEGMENT_SEC = 7.0
 VAD_MIN_SPEECH_MS = 300
 VAD_PAD_MS = 200
+# ── 음성 전처리 (잡음 제거) — 관중 함성 속 해설 명료도 ↑, STT 환각 ↓ (denoise.py) ──
+AUDIO_DENOISE = "spectral"   # off / spectral(기본, 의존성 없음) / noisereduce / rnnoise / deepfilternet(pip설치필요) / auto
+AUDIO_DENOISE_STRENGTH = 1.0 # 0.5~2.0. 관중 함성이 심하면 1.5, 해설이 뭉개지면 0.7
+VAD_ENERGY_GATE = 0.0        # RMS가 이보다 작은 오디오 조각은 Silero VAD에 넣기 전에 버림 (CPU 절약·오검출 감소). 0=끔, 보통 0.001~0.005
+# ── 스코어보드 로컬 OCR — 골 확인 때 Haiku 대신 Windows OCR로 먼저 읽어 비용 절감 (scoreboard_ocr.py) ─
+SCOREBOARD_LOCAL_OCR = True  # True: 로컬 OCR 먼저 시도, 실패하면 Haiku fallback. False: 항상 Haiku
+# ── STT 환각 억제 (faster-whisper 신뢰도 기반 추가 필터, stt.py) ─────────────────
+STT_MIN_LOGPROB = -1.2       # 세그먼트 평균 로그확률이 이보다 낮으면 환각으로 간주 (-1.5~-0.8, 높을수록 엄격)
+STT_MAX_NOSPEECH_PROB = 0.6  # no_speech_prob 이보다 높으면 무음/소음으로 간주
+STT_REPETITION_FILTER = True # 같은 단어·구절 반복 환각 걸러냄
+# ── 스트리밍 중간 인식 — 말하는 중에도 주기적으로 인식해 자막 표시·골 조기 감지 (지연 감소) ──
+STT_STREAMING = True         # True: 중간 인식 사용. 최종 인식은 기존 VAD 세그먼트 그대로
+STT_PARTIAL_INTERVAL = 2.5   # 중간 인식 간격(초). 짧을수록 빠르지만 STT 부하↑ (2.0~4.0 권장)
 
 # ── 창 (overlay_app.py) — OBS에선 '윈도우 캡처'. 창을 닫으면 프로그램 종료 ────────────
+SHOW_WINDOWS = True            # 채팅·라인업 창을 띄움 (False 나 --no-window 면 OBS 브라우저 소스만)
 WINDOW_SCALE = 1.0
 WINDOW_CHAT_SIZE = (400, 700)
 WINDOW_FONT_SIZE = 14
