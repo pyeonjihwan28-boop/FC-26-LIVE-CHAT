@@ -273,3 +273,17 @@ class _Template:
 
 
 tpl = _Template()
+
+
+# ── 규칙 가지치기 (프롬프트 자가개선 [LEARNED] 중복·충돌 제거) ─────────────
+def prune_rules(rules, max_rules=15, sim=0.72):
+    """의미가 비슷한 규칙을 합치고(중복 제거), 최대 개수를 넘으면 오래된 것부터 버림. 순서 유지."""
+    kept = []
+    for r in rules:
+        r = str(r).strip()
+        if not r:
+            continue
+        if any(difflib.SequenceMatcher(None, r, k).ratio() >= sim or r in k or k in r for k in kept):
+            continue
+        kept.append(r)
+    return kept[-max_rules:]

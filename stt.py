@@ -102,18 +102,25 @@ class KoreanSTT:
             log_prob_threshold=-1.0,
             compression_ratio_threshold=2.4,
         )
-        text = " ".join(s.text.strip() for s in segments if s.text.strip())
-        return text, info
+        segs = [s for s in segments if s.text.strip()]
+        text = " ".join(s.text.strip() for s in segs)
+        avg_logprob = sum(s.avg_logprob for s in segs) / len(segs) if segs else -99.0
+        no_speech_prob = max((s.no_speech_prob for s in segs), default=1.0)
+        return text, info, avg_logprob, no_speech_prob
 
     def transcribe(self, audio: np.ndarray) -> str | None:
+        min_lp = getattr(self.cfg, "STT_MIN_LOGPROB", -99.0)
+        max_ns = getattr(self.cfg, "STT_MAX_NOSPEECH_PROB", 1.0)
         if self.language_guard:
-            text, info = self._decode(audio, None)
+            text, info, avg_lp, ns_p = self._decode(audio, None)
             if info.language != "ko":
                 if info.language_probability >= 0.5:
                     return None                  # 확실히 한국어가 아님 (메뉴 음악 가사 등)
-                text, _ = self._decode(audio, "ko")  # 애매하면 한국어로 다시
+                text, _, avg_lp, ns_p = self._decode(audio, "ko")  # 애매하면 한국어로 다시
         else:
-            text, _ = self._decode(audio, "ko")
+            text, _, avg_lp, ns_p = self._decode(audio, "ko")
+        if avg_lp < min_lp or ns_p > max_ns:
+            return None                          # 저신뢰 → 환각으로 간주 (신뢰도 기반 필터)
         return self.clean(text, len(audio) / SR)
 
     def clean(self, text: str, seconds: float) -> str | None:
@@ -123,6 +130,12 @@ class KoreanSTT:
         t = re.sub(r"(.)\1{5,}", r"\1\1\1", t)      # "아아아아아아아" → "아아아"
         if len(t.replace(" ", "")) < 2:
             return None
+        if getattr(self.cfg, "STT_REPETITION_FILTER", False):
+            words = re.findall(r"[가-힣A-Za-z]{2,}", t)
+            if len(words) >= 6 and len(set(words)) * 3 < len(words):
+                return None                          # 같은 단어 반복 환각
+            if re.search(r"(.{4,}?)\1{2,}", t + " "):  # 같은 4음절 이상 구절 3회 이상 반복 (마지막 반복 뒤 구분자가
+                return None                             # 없어서 매칭이 안 되는 걸 막으려고 끝에 공백 하나 붙여서 검사)
         if any(p.search(t) for p in HALLUCINATIONS):
             return None
         for hint in (self.prompt, self.hotwords or ""):

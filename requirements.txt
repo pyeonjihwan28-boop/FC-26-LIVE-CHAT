@@ -8,3 +8,9 @@ Pillow>=10.0
 faster-whisper>=1.2
 onnxruntime>=1.17
 PyAudioWPatch>=0.2.12.6; sys_platform == "win32"
+
+# ── 옵션: 잡음 제거 전처리 (config.AUDIO_DENOISE 로 선택, 설치 안 해도 기본(spectral) 동작) ──
+# deepfilternet>=0.5.6        # 딥러닝 잡음 제거 (가장 성능 좋음, ~100MB) → AUDIO_DENOISE="deepfilternet"
+# noisereduce>=3.0            # 정지성 잡음 제거 → AUDIO_DENOISE="noisereduce"
+# rnnoise>=0.1                # 초저지연 잡음 제거 → AUDIO_DENOISE="rnnoise"
+# dspy>=2.4                   # 프롬프트 최적화 (prompt_optimizer.py, 없어도 APE 루프로 동작)

@@ -102,6 +102,10 @@ class VoicePipeline:
         self.last_lag_warn = 0.0
 
         self.source = open_source(args)      # 장치가 틀렸으면 모델 로딩 전에 바로 알려줌
+        from denoise import build_denoiser
+        self.denoiser = build_denoiser(getattr(config, "AUDIO_DENOISE", "off"), SR,
+                                       getattr(config, "AUDIO_DENOISE_STRENGTH", 1.0))
+        self.energy_gate = getattr(config, "VAD_ENERGY_GATE", 0.0)
         self.segmenter = Segmenter(
             SileroVAD(cache_dir=str(HERE / "models")), self._on_segment,
             threshold=config.VAD_THRESHOLD,
@@ -111,15 +115,26 @@ class VoicePipeline:
             pad_ms=config.VAD_PAD_MS,
         )
         self.stt = KoreanSTT(config)
+        self.streaming = getattr(config, "STT_STREAMING", False)
+        self.partial_interval = getattr(config, "STT_PARTIAL_INTERVAL", 2.5)
+        self.partial_samples = int(self.partial_interval * SR)
+        self.last_partial = 0.0
+        self.buf_lock = threading.Lock()
+        self.speech_buf = np.zeros(0, np.float32)
 
     def _on_audio(self, chunk):            # 오디오 스레드
         try:
-            self.audio_q.put_nowait(chunk)
+            chunk = self.denoiser.process(chunk)   # 잡음 제거 전처리 (VAD 앞)
+            if len(chunk):
+                self.audio_q.put_nowait(chunk)
         except queue.Full:
             pass
 
     def _on_segment(self, audio):          # VAD 스레드
         self.seg_q.put((audio, time.monotonic()))
+        if self.streaming:
+            with self.buf_lock:
+                self.speech_buf = np.zeros(0, np.float32)
 
     def _vad_loop(self):
         started, heard, warned = time.monotonic(), False, False
@@ -136,20 +151,30 @@ class VoicePipeline:
             if not heard and np.abs(chunk).max() > 1e-4:
                 heard = True
                 print("[오디오] 소리 들어오는 중 ✓")
+            if self.energy_gate and float(np.sqrt(np.mean(chunk.astype(np.float64) ** 2))) < self.energy_gate:
+                continue                                # 너무 작은 소리는 VAD 생략 (CPU 절약, 오검출 감소)
             self.segmenter.feed(chunk)
+            if self.streaming:
+                with self.buf_lock:
+                    self.speech_buf = np.concatenate([self.speech_buf, chunk])
 
     def _stt_loop(self):
         gap = np.zeros(int(0.15 * SR), np.float32)
         while not self.stop_ev.is_set():
+            segs = []
             try:
-                segs = [self.seg_q.get(timeout=0.5)]
+                segs = [self.seg_q.get(timeout=0.3)]
+                while True:                 # 밀린 구간이 있으면 한 번에 묶어서 인식
+                    try:
+                        segs.append(self.seg_q.get_nowait())
+                    except queue.Empty:
+                        break
             except queue.Empty:
+                pass
+            if not segs:
+                if self.streaming:
+                    self._maybe_partial()
                 continue
-            while True:                     # 밀린 구간이 있으면 한 번에 묶어서 인식
-                try:
-                    segs.append(self.seg_q.get_nowait())
-                except queue.Empty:
-                    break
             keep, total = [], 0
             for audio, t in reversed(segs):  # 너무 밀렸으면 최신 것 위주로
                 if keep and total + len(audio) > MAX_MERGE_SEC * SR:
@@ -170,6 +195,24 @@ class VoicePipeline:
                       "(예: \"small\") 하거나 STT_BEAM_SIZE = 1 로 바꿔보세요.")
             if text:
                 self.on_text(text, {"lag": lag, "sec": len(merged) / SR})
+
+    def _maybe_partial(self):
+        """말하는 중에도 주기적으로 지금까지 들린 해설을 중간 인식 (자막+골 조기감지, 최종 인식과 별개)"""
+        now = time.monotonic()
+        if now - self.last_partial < self.partial_interval:
+            return
+        with self.buf_lock:
+            buf = self.speech_buf.copy()
+        if len(buf) < self.partial_samples:
+            return
+        try:
+            text = self.stt.transcribe(buf)
+        except Exception as e:
+            print(f"[STT] 중간 인식 오류: {e}")
+            return
+        self.last_partial = now
+        if text:
+            self.on_text(text, {"partial": True, "lag": 0.0, "sec": len(buf) / SR})
 
     def start(self):
         threading.Thread(target=self._vad_loop, name="vad", daemon=True).start()
@@ -268,6 +311,7 @@ async def welcome_members(book, brain, publish):
 
 
 async def amain(args, ui=None):
+    from audience import scenes
     from chat_brain import ChatBrain
     from viewers import Viewers
 
@@ -294,6 +338,12 @@ async def amain(args, ui=None):
     print(f"[라인업]   {url}lineup?transparent=1   (lineup.json 수정하면 자동 반영)\n")
 
     def handle_text(text, meta):
+        if meta.get("partial"):                       # 중간 인식: 자막 표시 + 골 멘트 조기 감지만
+            print(f"🎙  {text}   (중간 인식)")
+            hub.publish({"type": "commentary", "text": text, "partial": True})
+            if "goal" in scenes(text):
+                bus.emit("goal_cue")                # 골 멘트를 몇 초 먼저 잡아 떼창 시작
+            return
         print(f"🎙  {text}   (말 끝난 뒤 {meta['lag']:.1f}s)" if meta["lag"] else f"🎙  {text}")
         bus.emit("commentary", text)            # chat_brain·audience 가 각자 구독 (채팅 반응, 골·종료 감지)
         hub.publish({"type": "commentary", "text": text})

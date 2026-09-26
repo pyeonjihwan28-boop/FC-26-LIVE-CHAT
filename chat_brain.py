@@ -20,7 +20,7 @@ from collections import deque
 from datetime import datetime, timedelta, timezone
 
 from audience import scenes
-from blocks import HERE, ai, bus, store, tpl
+from blocks import HERE, ai, bus, store, tpl, prune_rules
 from goals import season_goals_text
 from lineup_scan import obj
 
@@ -296,8 +296,8 @@ class ChatBrain:
                                  model=self.cfg.COACH_MODEL, effort=self.cfg.COACH_EFFORT)
         drop = {i - 1 for i in res["remove_rules"] if 1 <= i <= len(rules)}
         kept = [r for i, r in enumerate(rules) if i not in drop]
-        added = [r.strip()[:80] for r in res["add_rules"][:2] if r.strip() and r.strip() not in kept]   # 자주 도니까 조금씩
-        new = (kept + added)[-self.cfg.COACH_MAX_RULES:]
+        added = [r.strip()[:80] for r in res["add_rules"][:2] if r.strip()]   # 자주 도니까 조금씩
+        new = prune_rules(kept + added, self.cfg.COACH_MAX_RULES)  # 의미 중복 규칙 합치기
         if new != rules:
             tpl.save_learned(new)
         with (HERE / "prompt_review_log.jsonl").open("a", encoding="utf-8") as f:
