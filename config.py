@@ -3,6 +3,10 @@ FC 26 가상 라이브 채팅 — 설정 (튜닝은 대부분 이 파일만)
 """
 from blocks import store as _store
 
+# ── 오버레이 서버 (main.py) ──────────────────────────────────────────
+HOST = "127.0.0.1"
+PORT = 8765
+
 # ── 방송 배경: 시청자들은 '스포츠 채널 유튜브의 실제 축구 생중계 라이브'로 보고 있음 ─────────
 CHANNEL_NAME = "스포츠TV"      # 중계 채널 이름
 PROGRAM_NAME = ""              # 중계 프로그램 이름 (비우면 "축구 생중계")
@@ -68,6 +72,7 @@ VAD_MIN_SPEECH_MS = 300
 VAD_PAD_MS = 200
 
 # ── 창 (overlay_app.py) — OBS에선 '윈도우 캡처'. 창을 닫으면 프로그램 종료 ────────────
+SHOW_WINDOWS = True            # 채팅·라인업 창을 띄움 (False 나 --no-window 면 OBS 브라우저 소스만)
 WINDOW_SCALE = 1.0
 WINDOW_CHAT_SIZE = (400, 700)
 WINDOW_FONT_SIZE = 14
