@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실시간 채팅</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  주소 옵션 (여러 개는 &로 연결)
+    ?transparent=1   배경 투명 + 헤더 숨김 (OBS 브라우저 소스용)
+    ?bg=0.45         배경 불투명도 0~1 (투명 모드에서 반투명 패널이 필요할 때)
+    ?size=16         글자 크기(px)
+    ?max=40          화면에 남길 최대 메시지 수
+    ?header=0        헤더 숨김
+    ?debug=1         인식된 해설 문장을 위쪽에 표시 (튜닝용)
+    ?demo=1          서버 없이 가짜 채팅으로 모양 미리보기 (파일을 그냥 열어도 자동 데모)
+-->
+<style>
+  :root {
+    --bg-rgb: 15, 15, 15;
+    --bg-alpha: 1;
+    --line: rgba(255, 255, 255, .1);
+    --text: #f1f1f1;
+    --name: #aaaaaa;
+    --member: #2ba640;
+    --mod: #5e84f1;
+    --fs: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    display: flex; flex-direction: column; overflow: hidden;
+    background: rgba(var(--bg-rgb), var(--bg-alpha));
+    color: var(--text);
+    font: 400 var(--fs)/1.55 "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+    font-size: 15px; font-weight: 500;
+  }
+  header[hidden] { display: none; }
+  .live { width: 8px; height: 8px; border-radius: 50%; background: #5a5a5a; transition: background .3s; }
+  .live.on { background: #ff4e45; box-shadow: 0 0 0 3px rgba(255, 78, 69, .22); }
+
+  #caption {
+    margin: 8px 12px 0; padding: 6px 10px; border-radius: 6px;
+    background: rgba(0, 0, 0, .55); color: #cfcfcf; font-size: .86em;
+  }
+  #caption[hidden] { display: none; }
+
+  #feed {
+    flex: 1 1 auto; min-height: 0; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;   /* 새 메시지는 아래, 오래된 건 위로 밀려남 */
+    padding: 6px 0 10px;
+  }
+
+  .row { display: flex; align-items: flex-start; gap: 14px; padding: 4px 16px; }
+  .avatar {
+    flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%;
+    display: grid; place-items: center; margin-top: 1px;
+    font-size: 11px; font-weight: 700; color: #fff; user-select: none;
+  }
+  .content { min-width: 0; overflow-wrap: anywhere; }
+  .name { color: var(--name); font-size: .93em; font-weight: 500; margin-right: 6px; }
+  .name.member { color: var(--member); }
+  .name.mod { color: var(--mod); }
+  .badge { font-size: .78em; margin: 0 6px 0 -3px; vertical-align: 1px; }
+
+  .tip { margin: 6px 12px; border-radius: 8px; overflow: hidden; color: var(--tip-fg); }
+  .tip .top { display: flex; align-items: center; gap: 12px; padding: 8px 14px; background: var(--tip-head); }
+  .tip .who { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+  .tip .who .n { font-size: .88em; opacity: .85; }
+  .tip .who .amt { font-weight: 700; }
+  .tip .body { padding: 8px 14px 10px; background: var(--tip-body); overflow-wrap: anywhere; }
+
+  #viewers { margin-left: auto; color: #aaa; font-size: 12.5px; font-weight: 400; }
+  .join { margin: 6px 12px; border-radius: 8px; overflow: hidden; color: #fff; background: #0b8043; }
+  .join .top { display: flex; align-items: center; gap: 12px; padding: 8px 14px; background: #0f9d58; }
+  .join .who { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+  .join .who .n { font-weight: 700; }
+  .join .who .sub { font-size: .86em; color: #dcf5e6; }
+  .join .body { padding: 8px 14px 10px; overflow-wrap: anywhere; }
+
+  .enter { animation: rise .2s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .enter { animation: none; } }
+
+  /* 투명 모드: 게임 화면 위에서도 읽히도록 외곽 그림자 */
+  body.clear .row .content, body.clear #caption { text-shadow: 0 0 3px #000, 0 1px 2px #000, 0 0 1px #000; }
+  body.clear .name { color: #d0d0d0; }
+  body.clear .name.member { color: #47d35f; }
+  body.clear .name.mod { color: #8aa8ff; }
+</style>
+</head>
+<body>
+  <header id="header"><span class="live" id="live"></span><span id="title">실시간 채팅</span><span id="viewers"></span></header>
+  <div id="caption" hidden></div>
+  <main id="feed" aria-live="polite"></main>
+
+<script>
+(() => {
+  const qs = new URLSearchParams(location.search);
+  const $ = (id) => document.getElementById(id);
+  const feed = $("feed");
+  const MAX = Math.max(5, parseInt(qs.get("max"), 10) || 60);
+  const DEBUG = qs.get("debug") === "1";
+  const DEMO = qs.get("demo") === "1" || location.protocol === "file:";
+
+  if (qs.get("transparent") === "1") {
+    document.body.classList.add("clear");
+    document.documentElement.style.setProperty("--bg-alpha", "0");
+    $("header").hidden = true;
+  }
+  if (qs.has("bg")) document.documentElement.style.setProperty("--bg-alpha", String(Math.min(1, Math.max(0, parseFloat(qs.get("bg")) || 0))));
+  if (qs.get("header") === "0") $("header").hidden = true;
+  if (qs.get("size")) document.documentElement.style.setProperty("--fs", (parseFloat(qs.get("size")) || 14) + "px");
+
+  // 후원 금액 구간별 색 (본문, 머리, 글자)
+  const TIERS = [
+    [100000, "#e5484d", "#c9363c", "#ffffff"],
+    [50000,  "#d6409f", "#b8318a", "#ffffff"],
+    [20000,  "#f76b15", "#dc5a0c", "#ffffff"],
+    [10000,  "#ffc53d", "#f0ae1c", "#241a00"],
+    [5000,   "#3dd68c", "#26b875", "#03261a"],
+    [2000,   "#4ccce6", "#2fb2cd", "#062a33"],
+    [0,      "#5b8def", "#4574d6", "#ffffff"],
+  ];
+
+  function hash(s) { let h = 2166136261; for (const ch of s) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; } return h; }
+  function avatar(name) {
+    const el = document.createElement("div");
+    el.className = "avatar";
+    const s = name.replace(/^@(user-)?/, "").trim();
+    el.textContent = (s ? Array.from(s)[0] : "?").toUpperCase();
+    el.style.background = `hsl(${hash(name) % 360} 42% 40%)`;
+    return el;
+  }
+  function span(cls, text) { const el = document.createElement("span"); el.className = cls; el.textContent = text; return el; }
+
+  function chatRow(m) {
+    const row = document.createElement("div");
+    row.className = "row";
+    const c = document.createElement("div");
+    c.className = "content";
+    c.append(span("name" + (m.role ? " " + m.role : ""), m.name));
+    if (m.role === "mod") c.append(span("badge", "🔧"));
+    else if (m.role === "member") c.append(span("badge", "⭐"));
+    c.append(span("msg", m.text));
+    row.append(avatar(m.name), c);
+    return row;
+  }
+
+  function tipCard(m) {
+    const [, body, head, fg] = TIERS.find((t) => m.donation >= t[0]);
+    const card = document.createElement("div");
+    card.className = "tip";
+    card.style.setProperty("--tip-body", body);
+    card.style.setProperty("--tip-head", head);
+    card.style.setProperty("--tip-fg", fg);
+    const top = document.createElement("div");
+    top.className = "top";
+    const who = document.createElement("div");
+    who.className = "who";
+    who.append(span("n", m.name), span("amt", "₩" + Number(m.donation).toLocaleString("ko-KR")));
+    top.append(avatar(m.name), who);
+    card.append(top);
+    if (m.text) { const b = document.createElement("div"); b.className = "body"; b.textContent = m.text; card.append(b); }
+    return card;
+  }
+
+  function joinCard(m) {                       // 유튜브 새 멤버
+    const card = document.createElement("div");
+    card.className = "join";
+    const top = document.createElement("div");
+    top.className = "top";
+    const who = document.createElement("div");
+    who.className = "who";
+    who.append(span("n", m.name), span("sub", "새 멤버"));
+    top.append(avatar(m.name), who);
+    card.append(top);
+    if (m.text) { const b = document.createElement("div"); b.className = "body"; b.textContent = m.text; card.append(b); }
+    return card;
+  }
+
+  function addChat(m) {
+    if (!m || !m.name || !(m.text || m.type === "member")) return;
+    const el = m.type === "member" ? joinCard(m) : m.donation > 0 ? tipCard(m) : chatRow(m);
+    el.classList.add("enter");
+    feed.append(el);
+    while (feed.childElementCount > MAX) feed.firstElementChild.remove();
+  }
+
+  let captionTimer = 0;
+  function showCaption(text) {
+    const cap = $("caption");
+    cap.textContent = "🎙 " + text;
+    cap.hidden = false;
+    clearTimeout(captionTimer);
+    captionTimer = setTimeout(() => { cap.hidden = true; }, 8000);
+  }
+
+  function connect() {
+    const ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws");
+    ws.onopen = () => $("live").classList.add("on");
+    ws.onclose = () => { $("live").classList.remove("on"); setTimeout(connect, 1500); };
+    ws.onmessage = (e) => {
+      let m;
+      try { m = JSON.parse(e.data); } catch { return; }
+      if (m.type === "chat" || m.type === "member") addChat(m);
+      else if (m.type === "viewers") $("viewers").textContent = Number(m.count).toLocaleString("ko-KR") + "명 시청 중";
+      else if (m.type === "commentary" && DEBUG) showCaption(m.text);
+    };
+  }
+
+  function demo() {
+    $("title").textContent = "실시간 채팅 · 미리보기";
+    $("live").classList.add("on");
+    const people = [["축구보는고양이", "member"], ["수비라인뭐함", ""], ["ㅇㅇ", ""], ["킹갓골잡이", ""],
+                    ["@user-k3x9q2ab", ""], ["치킨시킴", ""], ["전술노트", "member"], ["채팅지기", "mod"]];
+    const lines = ["ㅋㅋㅋㅋㅋㅋ", "와 이걸 막네 ㄷㄷ", "형 수비 좀...", "GOOOOOOAL", "방금 스루패스 미쳤다",
+                   "이거 무슨 모드에요?", "오늘 폼 좋은데", "ㄹㅇ 해설 텐션 뭐임", "치킨 왔다 ㅎㅎ", "골대 맞은 거 실화냐"];
+    const pick = (a) => a[Math.floor(Math.random() * a.length)];
+    if (DEBUG) showCaption("손흥민 슈팅! 골입니다! 골망을 흔듭니다!");
+    (function tick() {
+      const [name, role] = pick(people);
+      const tip = Math.random() < 0.07 ? pick([1000, 5000, 10000, 20000, 50000]) : 0;
+      addChat({ name, role, text: tip ? "오늘 경기 최고다!!" : pick(lines), donation: tip });
+      setTimeout(tick, 300 + Math.random() * 1200);
+    })();
+  }
+
+  DEMO ? demo() : connect();
+})();
+</script>
+</body>
+</html>

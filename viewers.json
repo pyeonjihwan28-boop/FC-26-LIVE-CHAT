@@ -1,0 +1,1522 @@
+{
+ "shows": 32,
+ "history": [
+  {
+   "show": 19,
+   "date": "2026-09-26 10:19",
+   "summary": "수페르코파 바르사 vs 아틀레틱, 바르사 초반 빠른 페이스로 조기 선제골 성공"
+  },
+  {
+   "show": 22,
+   "date": "2026-09-26 10:30",
+   "summary": "수페르코파 토요일 아침, 비야레알 vs FC 바르셀로나 경기 중계"
+  },
+  {
+   "show": 25,
+   "date": "2026-09-26 10:37",
+   "summary": "수페르코파 바르셀로나 vs 아틀레틱, 토요일 아침 스페인 더비전. 바르사 초반 템포 좋고 로드리 중원 장악."
+  },
+  {
+   "show": 27,
+   "date": "2026-09-26 10:52",
+   "summary": "수페르코파 바르사 vs 아틀레틱, 이승우 바르사 데뷔전 대화 중심"
+  },
+  {
+   "show": 31,
+   "date": "2026-09-26 10:57",
+   "summary": "바르셀로나 vs 아틀레틱 수페르코파: 바르사 초반 빌드업 좋으나 아틀레틱 수비 집중"
+  }
+ ],
+ "session": {
+  "show": 32,
+  "date": "2026-09-26 11:06",
+  "match": "수페르코파 1월 07일 21:00 · 홈 FC 바르셀로나 vs 원정 아틀레틱 클루브",
+  "chatters": {
+   "@user-5eyrh71k": {
+    "count": 1,
+    "samples": [
+     "이승우!!!!"
+    ]
+   },
+   "@user-bgkiu6pt": {
+    "count": 1,
+    "samples": [
+     "오오오오"
+    ]
+   },
+   "@user-vuzs98c0": {
+    "count": 1,
+    "samples": [
+     "우리 승우다!!!"
+    ]
+   },
+   "@user-1y1xe34j": {
+    "count": 1,
+    "samples": [
+     "이승우 나왔다"
+    ]
+   },
+   "@user-b9vs6788": {
+    "count": 1,
+    "samples": [
+     "ㅇㅇ!!"
+    ]
+   },
+   "@user-4lska9r4": {
+    "count": 1,
+    "samples": [
+     "한국 선수 응원해"
+    ]
+   },
+   "@user-slq8kvb2": {
+    "count": 1,
+    "samples": [
+     "승우 화이팅"
+    ]
+   },
+   "@user-z1s8xxa2": {
+    "count": 1,
+    "samples": [
+     "어어어어"
+    ]
+   },
+   "@user-c3zv2yy6": {
+    "count": 1,
+    "samples": [
+     "이게 뭐하는 거야 ㅋㅋㅋ"
+    ]
+   },
+   "@user-ouh44w7f": {
+    "count": 1,
+    "samples": [
+     "한국인이라니 신기하네 ㄷㄷ"
+    ]
+   },
+   "@user-5wivnjql": {
+    "count": 1,
+    "samples": [
+     "바르셀로나 한국 선수 언제부터 이래"
+    ]
+   },
+   "@user-q3rqqdw9": {
+    "count": 1,
+    "samples": [
+     "이승우 뭐하냐"
+    ]
+   },
+   "@user-v79o42sy": {
+    "count": 1,
+    "samples": [
+     "승우 여기서 뭐해"
+    ]
+   },
+   "@user-bjdjtzq2": {
+    "count": 1,
+    "samples": [
+     "와 진짜 한국 선수 바르셀로나에"
+    ]
+   },
+   "@user-3q6xjuc5": {
+    "count": 1,
+    "samples": [
+     "이승우 나이 몇임"
+    ]
+   },
+   "@user-tr0uxzdc": {
+    "count": 1,
+    "samples": [
+     "토요일 낮에 한국 선수 바르셀로나 경기 본다 ㄷㄷ"
+    ]
+   },
+   "@user-te7qwdms": {
+    "count": 1,
+    "samples": [
+     "승우 응원한다!!"
+    ]
+   },
+   "@user-ghvjvoa4": {
+    "count": 1,
+    "samples": [
+     "오늘 이승우 경기 봐야지"
+    ]
+   },
+   "@user-bppqtv1l": {
+    "count": 1,
+    "samples": [
+     "한국 선수 바르셀로나 ㄱㅁㄷ"
+    ]
+   },
+   "@user-d2hlm0hc": {
+    "count": 1,
+    "samples": [
+     "헤드리 미쳤다"
+    ]
+   },
+   "@user-b6tulege": {
+    "count": 1,
+    "samples": [
+     "와 이승우!!!!"
+    ]
+   },
+   "@user-3p7ztkvo": {
+    "count": 1,
+    "samples": [
+     "한국 선수 골?!"
+    ]
+   },
+   "@user-pxqxwxkm": {
+    "count": 1,
+    "samples": [
+     "승우 슈팅!!!"
+    ]
+   },
+   "국뽕한스푼": {
+    "count": 2,
+    "samples": [
+     "어?? 이승우 골이냐??",
+     "아 페드리가 미스?? 이승우는 넣었잖아"
+    ]
+   },
+   "@user-tqsa3orp": {
+    "count": 1,
+    "samples": [
+     "GOAL!!!"
+    ]
+   },
+   "@user-0z42vbzn": {
+    "count": 1,
+    "samples": [
+     "한국인이 골 넣었네ㅋㅋㅋㅋ"
+    ]
+   },
+   "@user-o2u60e2p": {
+    "count": 1,
+    "samples": [
+     "이승우 미쳤다"
+    ]
+   },
+   "킹갓골잡이": {
+    "count": 10,
+    "samples": [
+     "!!!!!!!!!!!!!!",
+     "이승우 골로 앞서가니까 좋네!!!",
+     "슈팅!!!!!",
+     "어어어어!!!!!!",
+     "아 아까 왜 안 들어가!!!!!",
+     "!!!!!!!!!"
+    ]
+   },
+   "@user-p4czfqr3": {
+    "count": 1,
+    "samples": [
+     "토요일 낮에 한국 선수 골 본다 ㄷㄷ"
+    ]
+   },
+   "@user-o4hv0vej": {
+    "count": 1,
+    "samples": [
+     "승우 화이팅!!!!"
+    ]
+   },
+   "@user-gqjyms03": {
+    "count": 1,
+    "samples": [
+     "골이다 골이다!!!"
+    ]
+   },
+   "감성축구": {
+    "count": 2,
+    "samples": [
+     "한국 선수가 바르사에서... 눈물 나 🥹",
+     "아 너무 예쁜 득점이다 🎯"
+    ]
+   },
+   "@user-qm3cj80c": {
+    "count": 1,
+    "samples": [
+     "ㄴㄴ 누가 넣었어?"
+    ]
+   },
+   "@user-rnf2xmpg": {
+    "count": 1,
+    "samples": [
+     "이승우다 이승우!!"
+    ]
+   },
+   "@user-6op2u1bb": {
+    "count": 1,
+    "samples": [
+     "와 진짜다"
+    ]
+   },
+   "원정석": {
+    "count": 9,
+    "samples": [
+     "어? 바르사 뭐하는 거냐 ㅋㅋ",
+     "ㅋㅋㅋ 바르사가 수비 집중하게 하는 우리팀 ㅋㅋㅋ",
+     "우리 수비 집중력 대박 ㅋㅋ",
+     "산셋!! 나이스!!",
+     "산셋 폼 미쳤어 진짜",
+     "산셋 뭐하는데 이럼 ㅋㅋㅋ 폼 미쳤다고"
+    ]
+   },
+   "@user-ig24v26m": {
+    "count": 1,
+    "samples": [
+     "1:0 리드 좋네"
+    ]
+   },
+   "@user-mac674v3": {
+    "count": 1,
+    "samples": [
+     "페드리 어?? 뭐해"
+    ]
+   },
+   "@user-yqn1176a": {
+    "count": 1,
+    "samples": [
+     "아까 이승우 골 아니었나?"
+    ]
+   },
+   "@user-p5pcdn55": {
+    "count": 1,
+    "samples": [
+     "그냥 원정이 잘 수비하는 듯"
+    ]
+   },
+   "@user-e1eca8a7": {
+    "count": 1,
+    "samples": [
+     "바르사 초반부터 좀 흐릿한데"
+    ]
+   },
+   "@user-a48wreax": {
+    "count": 1,
+    "samples": [
+     "페드리 조급해 보이네"
+    ]
+   },
+   "@user-uvfo5e9m": {
+    "count": 1,
+    "samples": [
+     "로드리가 중원 잡아야지"
+    ]
+   },
+   "@user-te3qkjrs": {
+    "count": 1,
+    "samples": [
+     "원정이 집중력 있네"
+    ]
+   },
+   "@user-javbwebx": {
+    "count": 1,
+    "samples": [
+     "아직 32분이니까 시간 많지"
+    ]
+   },
+   "전술노트": {
+    "count": 12,
+    "samples": [
+     "바르사 빌드업 막히고 있네 아틀레틱 압박 강하다",
+     "아틀레틱 압박이 바르사 빌드업을 제시간에 끊고 있다는 뜻인 듯",
+     "측면 수비 재정렬 필요. 하키미 후퇴 타이밍 조정해야",
+     "아틀레틱 빌드업 빨라졌네 교체 타이밍?",
+     "아틀레틱 공격 템포 올라왔네 교체 맞는데",
+     "아틀레틱 압박 강해졌다 빌드업 조심해야지"
+    ]
+   },
+   "@user-r8cksxfn": {
+    "count": 1,
+    "samples": [
+     "뭐가 가난?"
+    ]
+   },
+   "@user-9dcj8lr5": {
+    "count": 1,
+    "samples": [
+     "ㅋㅋㅋㅋ 캐스터 뭐라는 거야"
+    ]
+   },
+   "@user-vsvbtp38": {
+    "count": 1,
+    "samples": [
+     "음성인식 미쳤네"
+    ]
+   },
+   "@user-uf12tag5": {
+    "count": 1,
+    "samples": [
+     "아 페드리 패스 미스 말하는 건가"
+    ]
+   },
+   "@user-bk5lwpg1": {
+    "count": 1,
+    "samples": [
+     "화질 구지라서 안 들리네"
+    ]
+   },
+   "@user-9ao6kxi1": {
+    "count": 1,
+    "samples": [
+     "페드리 조급한 게 보인다니까"
+    ]
+   },
+   "@user-ibgggprd": {
+    "count": 1,
+    "samples": [
+     "ㄹㅇ 초반부터 뭔가 어색함"
+    ]
+   },
+   "@user-r1oraj8c": {
+    "count": 1,
+    "samples": [
+     "아직 앞서가니까 괜찮지"
+    ]
+   },
+   "@user-1f1k1b3s": {
+    "count": 1,
+    "samples": [
+     "역습 찬스!"
+    ]
+   },
+   "@user-4gs9qbvg": {
+    "count": 1,
+    "samples": [
+     "이승우 달려!"
+    ]
+   },
+   "@user-kqyu5spc": {
+    "count": 1,
+    "samples": [
+     "ㄷㄷㄷㄷ"
+    ]
+   },
+   "@user-1a3s5e0m": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 빠르네"
+    ]
+   },
+   "@user-j1b2xko5": {
+    "count": 1,
+    "samples": [
+     "골!!!"
+    ]
+   },
+   "@user-85wxex9t": {
+    "count": 1,
+    "samples": [
+     "페드리 오픈했는데"
+    ]
+   },
+   "@user-bggw7hta": {
+    "count": 1,
+    "samples": [
+     "야말 스피드 ㅋㅋㅋ"
+    ]
+   },
+   "@user-rdljg9j0": {
+    "count": 1,
+    "samples": [
+     "가는데 누가 컷?"
+    ]
+   },
+   "@user-edrm2ycb": {
+    "count": 1,
+    "samples": [
+     "위원님 말 맞음"
+    ]
+   },
+   "캐스터성대모사": {
+    "count": 5,
+    "samples": [
+     "역습 가야죠~ ㅋㅋㅋ",
+     "가야죠~! ㅋㅋㅋㅋ",
+     "위원님 말 맞음 어려운 동작이었어",
+     "위원님 말처럼 팽팽한 흐름 맞네요",
+     "상대 진영으로 빠르게 넘어갑니다 ㅋㅋㅋ"
+    ]
+   },
+   "@user-0dwqre2n": {
+    "count": 1,
+    "samples": [
+     "이승우 터치!"
+    ]
+   },
+   "@user-p4udlrvy": {
+    "count": 1,
+    "samples": [
+     "골 나올 듯한데"
+    ]
+   },
+   "@user-sncdb1g8": {
+    "count": 1,
+    "samples": [
+     "ㅇㅈㅇ"
+    ]
+   },
+   "@user-hy4fibw2": {
+    "count": 1,
+    "samples": [
+     "산셋!!!!"
+    ]
+   },
+   "@user-z5mudcvl": {
+    "count": 1,
+    "samples": [
+     "오오오!!!"
+    ]
+   },
+   "@user-sedh25ar": {
+    "count": 1,
+    "samples": [
+     "결정적 찬스!!"
+    ]
+   },
+   "@user-beouptce": {
+    "count": 1,
+    "samples": [
+     "골이다!!!!"
+    ]
+   },
+   "@user-nl3t2uj1": {
+    "count": 1,
+    "samples": [
+     "산셋 슈팅!!!"
+    ]
+   },
+   "@user-gcsfsi4l": {
+    "count": 1,
+    "samples": [
+     "우나이시몬 선방!!!"
+    ]
+   },
+   "@user-ig1efs7b": {
+    "count": 1,
+    "samples": [
+     "아 아까 골 나왔어야 하는데 ㅠㅠ"
+    ]
+   },
+   "@user-8s4y2eho": {
+    "count": 1,
+    "samples": [
+     "ㄷㄷㄷ"
+    ]
+   },
+   "심판규탄위원회": {
+    "count": 7,
+    "samples": [
+     "오프사이드 아니냐고 ㅋㅋ",
+     "오프사이드 확인하나 ㄱㄱ",
+     "아틀레틱 수비 이상하지 않음? 왜 저렇게 널려",
+     "아틀레틱 수비 뭐 하는 거냐 진짜",
+     "동점골 뭔가 이상했는데 VAR 봤냐",
+     "손 닿았으면 세이브 인정해야지 뭐하냐"
+    ]
+   },
+   "@user-jwfa7sfq": {
+    "count": 1,
+    "samples": [
+     "골키퍼 미쳤다"
+    ]
+   },
+   "@user-jpd724f5": {
+    "count": 1,
+    "samples": [
+     "아 가슴 철렁했네"
+    ]
+   },
+   "@user-prcev60z": {
+    "count": 1,
+    "samples": [
+     "수비 집중 ㅋㅋ"
+    ]
+   },
+   "@user-zku1e727": {
+    "count": 1,
+    "samples": [
+     "지금 분위기 좋네"
+    ]
+   },
+   "@user-709cnady": {
+    "count": 1,
+    "samples": [
+     "오오오오!!!"
+    ]
+   },
+   "@user-e1jm0602": {
+    "count": 1,
+    "samples": [
+     "어어어어!!!"
+    ]
+   },
+   "@user-x766ld6x": {
+    "count": 1,
+    "samples": [
+     "살짝 들어갔네 ㄷㄷ"
+    ]
+   },
+   "@user-ka4xh4ee": {
+    "count": 1,
+    "samples": [
+     "우나이시몬 뭐함 ㅋㅋ"
+    ]
+   },
+   "@user-2p20juij": {
+    "count": 1,
+    "samples": [
+     "발리 슈팅 미쳤다"
+    ]
+   },
+   "@user-vgjggk5z": {
+    "count": 1,
+    "samples": [
+     "아 가슴 철렁 ㄹㅇㄹㅇ"
+    ]
+   },
+   "@user-p8p2wflu": {
+    "count": 1,
+    "samples": [
+     "골키퍼 반응 빨라!!!!"
+    ]
+   },
+   "@user-vts2rxf7": {
+    "count": 1,
+    "samples": [
+     "와 거의 다 들어갔는데"
+    ]
+   },
+   "@user-kqhcn2q9": {
+    "count": 1,
+    "samples": [
+     "ㄷㄷㄷㄷㄷ"
+    ]
+   },
+   "@user-j28eqnfn": {
+    "count": 1,
+    "samples": [
+     "지금 경기 진짜 좋네"
+    ]
+   },
+   "@user-c1o04vog": {
+    "count": 1,
+    "samples": [
+     "오오오오!!!"
+    ]
+   },
+   "@user-jgy62j12": {
+    "count": 1,
+    "samples": [
+     "어어어어"
+    ]
+   },
+   "@user-9a92hnyo": {
+    "count": 1,
+    "samples": [
+     "아 들어갈뻔!!!"
+    ]
+   },
+   "@user-t3ni6omk": {
+    "count": 1,
+    "samples": [
+     "우나이시몬 풀타임"
+    ]
+   },
+   "@user-zunm482h": {
+    "count": 1,
+    "samples": [
+     "살짝 빛났네 ㄹㅇ"
+    ]
+   },
+   "@user-ftoffyk8": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 위험해 ㅠㅠ"
+    ]
+   },
+   "@user-bfh5di86": {
+    "count": 1,
+    "samples": [
+     "산셋 진짜 폼 좋네"
+    ]
+   },
+   "@user-ndx2of6o": {
+    "count": 1,
+    "samples": [
+     "가슴 철렁 ㄷㄷㄷ"
+    ]
+   },
+   "@user-mmc05pya": {
+    "count": 1,
+    "samples": [
+     "발리 왜 안 들어가ㅜㅜ"
+    ]
+   },
+   "@user-0nbnstys": {
+    "count": 1,
+    "samples": [
+     "골키퍼 신의 손 ㄱㄱ"
+    ]
+   },
+   "@user-ikg4uixe": {
+    "count": 1,
+    "samples": [
+     "와 거의 다 들어갔는데"
+    ]
+   },
+   "@user-n22fo8si": {
+    "count": 1,
+    "samples": [
+     "37분인데 이런 경기 감독 전술 뭐냐"
+    ]
+   },
+   "@user-l7oyvnb4": {
+    "count": 1,
+    "samples": [
+     "살짝 빛나가네 ㄹㅇ"
+    ]
+   },
+   "@user-umy2ww0w": {
+    "count": 1,
+    "samples": [
+     "야말!!!"
+    ]
+   },
+   "@user-z1skf3o6": {
+    "count": 1,
+    "samples": [
+     "오 야말 슈팅!!!"
+    ]
+   },
+   "@user-br5y9bq4": {
+    "count": 1,
+    "samples": [
+     "ㄷㄷㄷㄷ"
+    ]
+   },
+   "@user-cqtr0dsm": {
+    "count": 1,
+    "samples": [
+     "와 얘 정신 차렸네"
+    ]
+   },
+   "@user-dfbviudf": {
+    "count": 1,
+    "samples": [
+     "야말 폼 미쳤다"
+    ]
+   },
+   "@user-duuqprww": {
+    "count": 1,
+    "samples": [
+     "이승우 옆에서 야말이 ㅋㅋㅋ"
+    ]
+   },
+   "@user-czn61b9k": {
+    "count": 1,
+    "samples": [
+     "슈팅 감 좋네"
+    ]
+   },
+   "@user-pcpst64r": {
+    "count": 1,
+    "samples": [
+     "바르사 공격수 대박"
+    ]
+   },
+   "@user-2s4bfqet": {
+    "count": 1,
+    "samples": [
+     "ㄹㅇ 계속 기회네"
+    ]
+   },
+   "@user-v7gd3ocl": {
+    "count": 1,
+    "samples": [
+     "이번엔 들어갈 거 같은데"
+    ]
+   },
+   "@user-9gk8i5r4": {
+    "count": 1,
+    "samples": [
+     "야말 진짜 폼 미쳤다"
+    ]
+   },
+   "@user-o23ymind": {
+    "count": 1,
+    "samples": [
+     "ㄴㄴ 기회만 반복하네"
+    ]
+   },
+   "@user-v373zno4": {
+    "count": 1,
+    "samples": [
+     "이승우 옆에서 야말이 깠다"
+    ]
+   },
+   "@user-dam5zmjq": {
+    "count": 1,
+    "samples": [
+     "전방 압박 좋네"
+    ]
+   },
+   "@user-wofk251d": {
+    "count": 1,
+    "samples": [
+     "이거 들어가야 하는데"
+    ]
+   },
+   "@user-34pu1hzn": {
+    "count": 1,
+    "samples": [
+     "슈팅 감 ㄱㄱ"
+    ]
+   },
+   "@user-1t4aplcy": {
+    "count": 1,
+    "samples": [
+     "바르사 공격 계속 나온다"
+    ]
+   },
+   "해축고인물": {
+    "count": 2,
+    "samples": [
+     "이 정도 압박이면 90분 못 감당함 아틀레틱",
+     "이 정도 압박이면 이기지 결정력이 문제네"
+    ]
+   },
+   "@user-nroh2s73": {
+    "count": 1,
+    "samples": [
+     "야말 이 경기의 핵심인가"
+    ]
+   },
+   "@user-feobrhpa": {
+    "count": 1,
+    "samples": [
+     "기회 놀치지 마 ㄷㄷ"
+    ]
+   },
+   "@user-7hk0c7s2": {
+    "count": 1,
+    "samples": [
+     "하프타임까지 한 골 더 나올 듯"
+    ]
+   },
+   "@user-odnt0uo0": {
+    "count": 1,
+    "samples": [
+     "와 진짜 위험한데"
+    ]
+   },
+   "@user-flnmyrih": {
+    "count": 1,
+    "samples": [
+     "오오오 그게 들어갔네!!!"
+    ]
+   },
+   "@user-8sntxowh": {
+    "count": 1,
+    "samples": [
+     "야말 미쳤다"
+    ]
+   },
+   "@user-e2unprux": {
+    "count": 1,
+    "samples": [
+     "고오오올!!!!"
+    ]
+   },
+   "@user-qpw7eqin": {
+    "count": 1,
+    "samples": [
+     "이승우!!!!!!"
+    ]
+   },
+   "@user-ag9d342e": {
+    "count": 1,
+    "samples": [
+     "GOAL!!!!!"
+    ]
+   },
+   "@user-18nxdgmc": {
+    "count": 1,
+    "samples": [
+     "ㄷㄷㄷㄷ"
+    ]
+   },
+   "@user-quwdtjsd": {
+    "count": 1,
+    "samples": [
+     "2-0 가즈아"
+    ]
+   },
+   "@user-vikk11va": {
+    "count": 1,
+    "samples": [
+     "야말 폼 미쳤네"
+    ]
+   },
+   "@user-2cj200wd": {
+    "count": 1,
+    "samples": [
+     "손도 안 댔네 ㅋㅋㅋ"
+    ]
+   },
+   "@user-aqq7178e": {
+    "count": 1,
+    "samples": [
+     "야말이 맨오브더매치 가져간다"
+    ]
+   },
+   "@user-86zlb7l0": {
+    "count": 1,
+    "samples": [
+     "기회 놀치지 말라고 했잖아 ㄴㄴ"
+    ]
+   },
+   "출근전에보는중": {
+    "count": 3,
+    "samples": [
+     "토요일 낮 이런 경기면 뭐해 ㅋㅋ 최고다",
+     "낮 12시인데 이정도면 맛있는 경기네",
+     "낮시간 이정도 강도면 저녁은 어쩌냐"
+    ]
+   },
+   "@user-frvghwo4": {
+    "count": 1,
+    "samples": [
+     "바르사 1-0 리드 이대로 가면 우승!!"
+    ]
+   },
+   "@user-q3xte4sz": {
+    "count": 1,
+    "samples": [
+     "슈챗 ㄷㄷ"
+    ]
+   },
+   "@user-ka4y0wzo": {
+    "count": 1,
+    "samples": [
+     "이승우 바르사 왔을 때 뭐 하려고 이러냐"
+    ]
+   },
+   "@user-v68h6aj3": {
+    "count": 1,
+    "samples": [
+     "어????"
+    ]
+   },
+   "@user-2hlldcvs": {
+    "count": 1,
+    "samples": [
+     "뭐야 이게 언제 들어갔어"
+    ]
+   },
+   "@user-7abkwgns": {
+    "count": 1,
+    "samples": [
+     "아니 동점이라고???"
+    ]
+   },
+   "@user-y2wjw4a1": {
+    "count": 1,
+    "samples": [
+     "심판 봤냐 ㄷㄷ"
+    ]
+   },
+   "@user-wt0zauk3": {
+    "count": 1,
+    "samples": [
+     "1:1이네... 아쉽다"
+    ]
+   },
+   "@user-xvet2s0b": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 선제 골이구나"
+    ]
+   },
+   "@user-a3yfpa3z": {
+    "count": 1,
+    "samples": [
+     "손 안 댔는데 어떻게 들어감 ㅋㅋㅋㅋ"
+    ]
+   },
+   "@user-yilr6o8f": {
+    "count": 1,
+    "samples": [
+     "이승우 왔는데 바르사가 이렇게 되냐"
+    ]
+   },
+   "@user-ags0umr5": {
+    "count": 1,
+    "samples": [
+     "아 진짜 ㅋㅋㅋㅋㅋㅋ"
+    ]
+   },
+   "@user-fl2lw8l4": {
+    "count": 1,
+    "samples": [
+     "야말이 엔꼬한테 막혔네"
+    ]
+   },
+   "@user-e5te48oy": {
+    "count": 1,
+    "samples": [
+     "이게 낙인 들어가네 ㅠㅠ"
+    ]
+   },
+   "@user-8uy28cpl": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 수비 집중력 미쳤다"
+    ]
+   },
+   "@user-kpvac9f3": {
+    "count": 1,
+    "samples": [
+     "1:1 동점 상황 흐지부지 가면 안 되는데"
+    ]
+   },
+   "@user-pgmrdg77": {
+    "count": 1,
+    "samples": [
+     "슈챗 떴대 ㄷㄷ"
+    ]
+   },
+   "@user-hjk7b91u": {
+    "count": 1,
+    "samples": [
+     "이승우 화이팅!!!"
+    ]
+   },
+   "@user-8tfgbliu": {
+    "count": 1,
+    "samples": [
+     "후반 집중력 살려야지"
+    ]
+   },
+   "@user-58bnpj9z": {
+    "count": 1,
+    "samples": [
+     "윌리엄스 좋네"
+    ]
+   },
+   "@user-583efdqb": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 공격 계속 나온다"
+    ]
+   },
+   "@user-8lpytdty": {
+    "count": 1,
+    "samples": [
+     "바르사 집중 풀렸나"
+    ]
+   },
+   "@user-cgd4apxa": {
+    "count": 1,
+    "samples": [
+     "ㄷㄷㄷ"
+    ]
+   },
+   "@user-py6xret0": {
+    "count": 1,
+    "samples": [
+     "후반전 어떻게 될까"
+    ]
+   },
+   "@user-0mgl90gp": {
+    "count": 1,
+    "samples": [
+     "이승우 아직 기회 안 나왔네ㅠ"
+    ]
+   },
+   "@user-k460fj46": {
+    "count": 1,
+    "samples": [
+     "경기 레벨 높은데"
+    ]
+   },
+   "@user-jcg3splj": {
+    "count": 1,
+    "samples": [
+     "동점이 이상한데 골 키퍼 뭐함"
+    ]
+   },
+   "@user-425via5o": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 진짜 집중 미쳤다"
+    ]
+   },
+   "@user-64u1kh0v": {
+    "count": 1,
+    "samples": [
+     "윌리엄스 우측 측면 위협적이네"
+    ]
+   },
+   "@user-h99pf9dr": {
+    "count": 1,
+    "samples": [
+     "동점이네 팽팽하다"
+    ]
+   },
+   "@user-0v2zkbbs": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 살렸다"
+    ]
+   },
+   "@user-ijywicjs": {
+    "count": 1,
+    "samples": [
+     "ㄷㄷㄷㄷ"
+    ]
+   },
+   "@user-vi6u1ouj": {
+    "count": 1,
+    "samples": [
+     "이승우 언제 나올까"
+    ]
+   },
+   "@user-r5yggv4w": {
+    "count": 1,
+    "samples": [
+     "바르사 집중 풀렸네"
+    ]
+   },
+   "@user-pvnne63f": {
+    "count": 1,
+    "samples": [
+     "심판 뭐하냐고 ㅋㅋ"
+    ]
+   },
+   "@user-90zm4usq": {
+    "count": 1,
+    "samples": [
+     "후반전 뒤집어야지"
+    ]
+   },
+   "@user-pttfrlux": {
+    "count": 1,
+    "samples": [
+     "윌리엄스 진짜 강하네"
+    ]
+   },
+   "@user-guckade4": {
+    "count": 1,
+    "samples": [
+     "경기 개 재밌다"
+    ]
+   },
+   "@user-1iqm960b": {
+    "count": 1,
+    "samples": [
+     "1:1 다시 동점이면 교체 나올듯"
+    ]
+   },
+   "@user-i5dn13ac": {
+    "count": 1,
+    "samples": [
+     "야말 슈팅 보고싶다!!"
+    ]
+   },
+   "@user-yicjjni3": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 쓸데없이 강하네 ㅋㅋ"
+    ]
+   },
+   "@user-tfw5vtws": {
+    "count": 1,
+    "samples": [
+     "이승우 언제 본체?"
+    ]
+   },
+   "@user-rwjuv9j7": {
+    "count": 1,
+    "samples": [
+     "후반전이 진짜 경기다"
+    ]
+   },
+   "@user-nectd4z3": {
+    "count": 1,
+    "samples": [
+     "3점 골이 뭐냐 ㅋㅋ"
+    ]
+   },
+   "@user-9vsadify": {
+    "count": 1,
+    "samples": [
+     "팽팽하다 팽팽해"
+    ]
+   },
+   "@user-k7mnmkfv": {
+    "count": 1,
+    "samples": [
+     "골키퍼 손 닿았네"
+    ]
+   },
+   "@user-jvtacdlt": {
+    "count": 1,
+    "samples": [
+     "그래도 못 막네 ㄷㄷ"
+    ]
+   },
+   "@user-i7j5goqp": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 진짜 수비 좋다"
+    ]
+   },
+   "@user-ty5bmmbc": {
+    "count": 1,
+    "samples": [
+     "야말 슈팅 실수가 아니었네"
+    ]
+   },
+   "@user-ga7fcfyx": {
+    "count": 1,
+    "samples": [
+     "어?? 손 닿았는데 골?"
+    ]
+   },
+   "@user-f9vptxf6": {
+    "count": 1,
+    "samples": [
+     "요즘 심판 기준 ㅋㅋ"
+    ]
+   },
+   "@user-lq3z9tit": {
+    "count": 1,
+    "samples": [
+     "후반전에 뒤집자"
+    ]
+   },
+   "@user-zjetkvp2": {
+    "count": 1,
+    "samples": [
+     "역시 팽팽한 경기네"
+    ]
+   },
+   "@user-5x3eo1xr": {
+    "count": 1,
+    "samples": [
+     "이승우 뭐해 ㅋㅋㅋ"
+    ]
+   },
+   "@user-xgc5i3ld": {
+    "count": 1,
+    "samples": [
+     "윌리엄스 수비 ㄹㅇ 괜찮은데"
+    ]
+   },
+   "@user-9w2xuoc3": {
+    "count": 1,
+    "samples": [
+     "후반전 30분 남았다 화이팅"
+    ]
+   },
+   "@user-twcul33o": {
+    "count": 1,
+    "samples": [
+     "낮 12시인데 벌써 이정도면 체력 난리겠네"
+    ]
+   },
+   "@user-9pi0t0fc": {
+    "count": 1,
+    "samples": [
+     "ㅋㅋㅋㅋㅋ 3점 골이 뭐냐는 말 ㅋㅋ"
+    ]
+   },
+   "@user-u2zefd0n": {
+    "count": 1,
+    "samples": [
+     "1대1이면 후반전이 진짜다"
+    ]
+   },
+   "@user-vstf489m": {
+    "count": 1,
+    "samples": [
+     "아직 반시간 남았으니까 뭐라도 될거 같긴 한데"
+    ]
+   },
+   "@user-hb1vx0vi": {
+    "count": 1,
+    "samples": [
+     "이승우 좀 깨어나 ㅋㅋㅋ"
+    ]
+   },
+   "@user-5v3ii8j8": {
+    "count": 1,
+    "samples": [
+     "바르사 측면 뚫렸는데 이게 들어왔네 ㅋㅋ"
+    ]
+   },
+   "@user-rngu5cgq": {
+    "count": 1,
+    "samples": [
+     "아틀레틱 골키퍼 능력 있네 진짜"
+    ]
+   },
+   "@user-ric13xz0": {
+    "count": 1,
+    "samples": [
+     "후반전에서 이승우 나오나"
+    ]
+   },
+   "@user-zn2uy5pw": {
+    "count": 1,
+    "samples": [
+     "야말이 제일 아쉽지 그 슈팅 들어갔어야지"
+    ]
+   },
+   "@user-plt85u7w": {
+    "count": 1,
+    "samples": [
+     "역시 스페인 더비는 다르네"
+    ]
+   },
+   "@user-v23b5hcu": {
+    "count": 1,
+    "samples": [
+     "ㅋㅋㅋ 3점 골이란게 있냐 ㅋㅋ"
+    ]
+   },
+   "@user-ju1onlvh": {
+    "count": 1,
+    "samples": [
+     "페드리 로드리도 못 막네"
+    ]
+   },
+   "@user-mpuq88z4": {
+    "count": 1,
+    "samples": [
+     "후반전 시작하자"
+    ]
+   },
+   "@user-tdg946vg": {
+    "count": 1,
+    "samples": [
+     "낮 12시가 이 정도면 진짜 맛있는 경기다"
+    ]
+   },
+   "@user-0d8g5i41": {
+    "count": 1,
+    "samples": [
+     "이승우!!!"
+    ]
+   },
+   "@user-54l2s2yb": {
+    "count": 1,
+    "samples": [
+     "오오오오"
+    ]
+   },
+   "@user-1p71c8x2": {
+    "count": 1,
+    "samples": [
+     "나이스!!!"
+    ]
+   },
+   "@user-k7l0nhcj": {
+    "count": 1,
+    "samples": [
+     "이승우 좀 깨어났네"
+    ]
+   },
+   "@user-00n9gd5a": {
+    "count": 1,
+    "samples": [
+     "찬스다!!!"
+    ]
+   },
+   "@user-zgownndl": {
+    "count": 1,
+    "samples": [
+     "골이냐?"
+    ]
+   },
+   "@user-x3wxznsd": {
+    "count": 1,
+    "samples": [
+     "아 막혔다"
+    ]
+   },
+   "@user-bzrpoivl": {
+    "count": 1,
+    "samples": [
+     "우나이시몬 미쳤다"
+    ]
+   },
+   "@user-fy0vm0kq": {
+    "count": 1,
+    "samples": [
+     "이승우 이 기회 놓치지 말고"
+    ]
+   },
+   "@user-ic02kwdu": {
+    "count": 1,
+    "samples": [
+     "측면 장악할 수 있겠는데"
+    ]
+   },
+   "@user-jqtp08kx": {
+    "count": 1,
+    "samples": [
+     "골키퍼 손 봐"
+    ]
+   },
+   "@user-wmm71w8k": {
+    "count": 1,
+    "samples": [
+     "이승우 피니시 좀"
+    ]
+   },
+   "@user-klwjmjud": {
+    "count": 1,
+    "samples": [
+     "리빅 여기라도 득점하자"
+    ]
+   },
+   "@user-zy2mcfqj": {
+    "count": 1,
+    "samples": [
+     "이 기회 살려야지"
+    ]
+   }
+  }
+ },
+ "regulars": [
+  {
+   "name": "해축고인물",
+   "trait": "20년째 해외축구 새벽 시청. 옛날 레전드와 비교, 이 팀들 역사·라이벌 관계를 잘 앎",
+   "role": "member",
+   "since": 0,
+   "visits": 9,
+   "memory": "라포르테 나이에도 활약, 바르사-아틀레틱 전술 심화 분석"
+  },
+  {
+   "name": "전술노트",
+   "trait": "포메이션·압박·빌드업·교체 타이밍 훈수, 감독 비판도 함",
+   "role": "member",
+   "since": 0,
+   "visits": 7,
+   "memory": "바르사 빌드업과 아틀레틱 압박 라이브 분석으로 경기 주도"
+  },
+  {
+   "name": "심판규탄위원회",
+   "trait": "판정마다 불만, VAR 보라고 외침, 카드 나오면 제일 먼저 반응",
+   "role": "",
+   "since": 0,
+   "visits": 5,
+   "memory": "초반부터 높은 템포 주목하며 판정 감시 시작"
+  },
+  {
+   "name": "킹갓골잡이",
+   "trait": "과몰입, 슈팅만 나와도 느낌표 폭발",
+   "role": "",
+   "since": 0,
+   "visits": 8,
+   "memory": "초반 바르사 공격에 느낌표 연발하며 과몰입"
+  },
+  {
+   "name": "ㅇㅇ",
+   "trait": "초성만 침 (ㅋㅋㅋ, ㄷㄷ, ㄹㅇ, ㅅㅂ는 안 씀)",
+   "role": "",
+   "since": 0,
+   "visits": 7,
+   "memory": "초성으로만 경기 내내 반응 (ㄷㄷ, ㅇㅈㅇ)"
+  },
+  {
+   "name": "출근전에보는중",
+   "trait": "지금 시각에 맞는 생활 얘기 (새벽이면 잠·출근, 밤이면 퇴근·맥주)",
+   "role": "",
+   "since": 0,
+   "visits": 11,
+   "memory": "토요일 아침 유럽축구 생중계 전통, 퇴근 전 조기 퇴장"
+  },
+  {
+   "name": "치킨시킴",
+   "trait": "야식 얘기로 자꾸 딴소리, 골 나면 치킨 떨어뜨림",
+   "role": "",
+   "since": 0,
+   "visits": 6,
+   "memory": "야식 대신 아침밥 칭찬하며 경기 관전"
+  },
+  {
+   "name": "축알못입니다",
+   "trait": "규칙·선수를 잘 몰라서 질문 (오프사이드 왜요? 저 선수 누구예요?)",
+   "role": "",
+   "since": 0,
+   "visits": 6,
+   "memory": "지난 경기는 규칙 질문 없이 조용히 관전"
+  },
+  {
+   "name": "캐스터성대모사",
+   "trait": "캐스터·해설위원 멘트를 따라하거나 '위원님 말 맞음' 같은 반응",
+   "role": "",
+   "since": 0,
+   "visits": 7,
+   "memory": "해설위원 멘트 따라하며 장단 맞추기"
+  },
+  {
+   "name": "골키퍼팬클럽",
+   "trait": "골키퍼 선방·실수에 제일 크게 반응",
+   "role": "",
+   "since": 0,
+   "visits": 2,
+   "memory": "골키퍼 선방에 반응하며 다음 경기 대비"
+  },
+  {
+   "name": "원정석",
+   "trait": "늘 채팅창 다수의 반대편 팀 팬. 홈팬들과 티격태격하며 약올림",
+   "role": "",
+   "since": 0,
+   "visits": 6,
+   "memory": "아틀레틱 응원으로 바르사 팬들과 활발히 티격태격"
+  },
+  {
+   "name": "감성축구",
+   "trait": "감성 멘트, 이모지 자주 씀, 명장면에 울컥",
+   "role": "member",
+   "since": 0,
+   "visits": 7,
+   "memory": "페드리·로드리 찬사, 감성 이모지로 분위기 연출"
+  },
+  {
+   "name": "국뽕한스푼",
+   "trait": "한국 선수가 뛰면 그 선수만 봄. 없으면 가끔 대표팀·K리그 얘기",
+   "role": "",
+   "since": 0,
+   "visits": 3,
+   "memory": "이승우 데뷔 집중, 벤치 확인 반복 질문"
+  },
+  {
+   "name": "판타지리그중독",
+   "trait": "판타지 포인트·주급·이적설 얘기",
+   "role": "",
+   "since": 0,
+   "visits": 1,
+   "memory": "지난 경기는 판타지 포인트 언급 없음"
+  },
+  {
+   "name": "화질구지",
+   "trait": "중계 화질·버퍼링·광고·리플레이 연출 불평 (조용할 때 주로)",
+   "role": "",
+   "since": 0,
+   "visits": 4,
+   "memory": "4K 중계인데도 화질 흐리다고 불평"
+  },
+  {
+   "name": "스포츠TV 매니저",
+   "trait": "채널 매니저. 가끔 매너 채팅·도배 금지·스포일러 금지 공지, 골 장면엔 짧게 같이 환호",
+   "role": "mod",
+   "since": 0,
+   "visits": 3,
+   "memory": "매너 공지와 함께 골 장면에서 환호"
+  }
+ ]
+}

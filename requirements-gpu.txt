@@ -1,0 +1,5 @@
+# NVIDIA GPU로 음성 인식할 때만 추가 설치 (약 1GB)
+# CTranslate2 4.8.2 안에 들어있는 cuDNN(9.10.2.21)과 버전을 맞춰야 오류가 안 납니다.
+ctranslate2==4.8.2
+nvidia-cudnn-cu12==9.10.2.21
+nvidia-cublas-cu12>=12.4

@@ -1,0 +1,60 @@
+{
+  "league": "SUPERCOPA",
+  "round": "JAN 07 · 21:00",
+  "home": {
+    "name": "FC 바르셀로나",
+    "formation": "4-2-3-1",
+    "players": [
+      [1, "조나룸마", "Jonnarumma"],
+      [5, "멘데스", "Mendes"],
+      [3, "디아스", "Dias"],
+      [6, "파초", "Pacho"],
+      [2, "하키미", "Hakimi"],
+      [8, "페드리", "Pedri"],
+      [16, "로드리", "Rodri"],
+      [17, "하피냐", "Raphinha"],
+      [32, "비틴냐", "Vitinha"],
+      [19, "야말", "Lamine Yamal"],
+      [99, "이승우", "Lee Seung-woo"]
+    ],
+    "gk_kit": {
+      "base": "#1FB86A",
+      "number": "#FFFFFF"
+    },
+    "short": "BAR",
+    "kit": {
+      "base": "#004B87",
+      "number": "#FFC52F",
+      "stripe": "#FFC52F"
+    }
+  },
+  "away": {
+    "name": "아틀레틱 클루브",
+    "formation": "4-2-3-1",
+    "players": [
+      [1, "우나이시몬", "Unai Simon"],
+      [3, "아다마", "Adama"],
+      [4, "라포르트", "Aymeric Laporte"],
+      [2, "비비안", "Dani Vivian"],
+      [5, "아이나", "Ola Aina"],
+      [8, "하우르키자르", "Jaurqizar"],
+      [22, "데갈라레티", "De Galarreti"],
+      [6, "윌리엄스", "Williams Jr"],
+      [11, "산셋", "Oscar Sancet"],
+      [10, "제임스", "James Rodriguez"],
+      [9, "구루세타", "Gorka Guruzeta"]
+    ],
+    "gk_kit": {
+      "base": "#1FB86A",
+      "number": "#FFFFFF"
+    },
+    "short": "ATH",
+    "kit": {
+      "base": "#FFFFFF",
+      "number": "#FFFFFF",
+      "stripe": "#DC143C"
+    }
+  },
+  "competition": "수페르코파",
+  "kickoff": "1월 07일 21:00"
+}

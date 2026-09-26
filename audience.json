@@ -1,0 +1,66 @@
+{
+ "비야레알 | 루이스 주니오르 / Luiz Júnior, 카르도나 / Sergi Cardona, 마린 / Rafa Marín, 베이가 / Renato Veiga, 포이스 / Juan Foyth, 모레이로 / Alberto Moleiro, 파티 / Thomas Partey, 게예 / Pape Gueye, 페페 / Nicolas Pépé, 아요세 / Ayoze Pérez, 미카우타제 / Georges Mikautadze || 바르셀로나 | 주안 가르시아 / Joan García, 발데 / Alejandro Balde, 쿠바르시 / Pau Cubarsí, 아라우호 / Ronald Araújo, 쿤데 / Jules Koundé, 페드리 / Pedri, 더 용 / Frenkie de Jong, 페르민 / Fermín López, 하피냐 / Raphinha, 레반도프스키 / Robert Lewandowski, 야말 / Lamine Yamal": {
+  "home": "비야레알",
+  "away": "바르셀로나",
+  "home_fans": 8000000,
+  "away_fans": 180000000,
+  "home_korean": [],
+  "away_korean": []
+ },
+ "비야레알 | 도나룸마 / Donnarumma, 멘데스 / Mendes, 페드리 / Pedri, 디아스 / Dias, 파초 / Pacho, 로드리 / Rodri, 하키미 / Hakimi, 하피냐 / Raphinha, 비티냐 / Vitinha, 야말 / Lamine Yamal, 이승우 / Lee Seung-woo || 바르셀로나 | 주안 가르시아 / Joan García, 발데 / Alejandro Balde, 쿠바르시 / Pau Cubarsí, 아라우호 / Ronald Araújo, 쿤데 / Jules Koundé, 페드리 / Pedri, 더 용 / Frenkie de Jong, 페르민 / Fermín López, 하피냐 / Raphinha, 레반도프스키 / Robert Lewandowski, 야말 / Lamine Yamal": {
+  "home": "비야레알",
+  "away": "바르셀로나",
+  "home_fans": 8000000,
+  "away_fans": 50000000,
+  "home_korean": [
+   "이승우"
+  ],
+  "away_korean": []
+ },
+ "비야레알 | 도나룸마 / Donnarumma, 멘데스 / Mendes, 페드리 / Pedri, 디아스 / Dias, 파초 / Pacho, 로드리 / Rodri, 하키미 / Hakimi, 하피냐 / Raphinha, 비티냐 / Vitinha, 야말 / Lamine Yamal, 이승우 / Lee Seung-woo || 바르셀로나 | 도나루마 / Donnarumma, 디아스 / Dias, 파초 / Paco, 로드리 / Rodri, 하기미 / Hakimi, 페드리 / Pedri, 엔데스 / Enders, 더용 / De Jong, 야말 / Yamal, 비티냐 / Vitinya, 하피냐 / Raphinha": {
+  "home": "비야레알",
+  "away": "바르셀로나",
+  "home_fans": 15000000,
+  "away_fans": 380000000,
+  "home_korean": [
+   "이승우"
+  ],
+  "away_korean": []
+ },
+ "FC 바르셀로나 |  || 아틀레틱 클루브 | ": {
+  "home": "FC 바르셀로나",
+  "away": "아틀레틱 클루브",
+  "home_fans": 600000000,
+  "away_fans": 80000000,
+  "home_korean": [],
+  "away_korean": []
+ },
+ "비야레알 | 마틴 / Martin, 쿠바르시 / Cubarsi, 올모 / Olmo, 페나 / Pena, 도쿠 / Doku, 멘데스 / Mendes, 디아스 / Dias, 아라우호 / Araujo, 쿤데 / Kunder, 하피냐 / Raphinha, 페드리 / Pedri || FC 바르셀로나 | ": {
+  "home": "비야레알",
+  "away": "FC 바르셀로나",
+  "home_fans": 2500000,
+  "away_fans": 180000000,
+  "home_korean": [],
+  "away_korean": []
+ },
+ "FC 바르셀로나 | 조나룸마 / Jonnarumma, 멘데스 / Mendes, 디아스 / Dias, 파초 / Pacho, 하키미 / Hakimi, 페드리 / Pedri, 로드리 / Rodri, 하피냐 / Raphinha, 비틴냐 / Vitinha, 야말 / Lamine Yamal, 이승우 / Lee Seung-woo || 아틀레틱 클루브 | 우나이시몬 / Unai Simon, 아다마 / Adama, 라포르트 / Aymeric Laporte, 비비안 / Dani Vivian, 아이나 / Ola Aina, 하우르키자르 / Jaurqizar, 데갈라레티 / De Galarreti, 윌리엄스 / Williams Jr, 산셋 / Oscar Sancet, 제임스 / James Rodriguez, 구루세타 / Gorka Guruzeta": {
+  "home": "FC 바르셀로나",
+  "away": "아틀레틱 클루브",
+  "home_fans": 180000000,
+  "away_fans": 50000000,
+  "home_korean": [
+   "이승우"
+  ],
+  "away_korean": []
+ },
+ "FC 바르셀로나 | 돈나룸마 / Gianluigi Donnarumma, 멘데스 / Mendes, 디아스 / Dias, 파초 / Pacho, 하키미 / Hakimi, 페드리 / Pedri, 로드리 / Rodri, 하피냐 / Raphinha, 비틴야 / Vitinha, 야말 / Lamine Yamal, 이승우 / Lee Seung-woo || 아틀레틱 클루브 | 우나이시몬 / Unai Simon, 아다마 / Adama, 라포르트 / Aymeric Laporte, 비비안 / Dani Vivian, 아이나 / Ola Aina, 하우르키자르 / Jaurqizar, 데갈라레티 / De Galarreti, 윌리엄스 / Williams Jr, 산셋 / Oscar Sancet, 제임스 / James Rodriguez, 구루세타 / Gorka Guruzeta": {
+  "home": "FC 바르셀로나",
+  "away": "아틀레틱 클루브",
+  "home_fans": 150000000,
+  "away_fans": 25000000,
+  "home_korean": [
+   "이승우"
+  ],
+  "away_korean": []
+ }
+}

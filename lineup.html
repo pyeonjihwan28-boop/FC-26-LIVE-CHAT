@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>라인업</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
+<!--
+  라인업은 lineup.json 을 고치고 저장하면 3초 안에 화면에 반영됩니다 (서버 재시작 필요 없음).
+  주소 옵션 (여러 개는 &로 연결)
+    ?transparent=1   배경 투명 (OBS 브라우저 소스용)
+    ?side=home       한 팀만 (home / away)
+    ?dir=column      두 팀을 위아래로
+    ?scale=1.2       전체 크기 배율
+-->
+<style>
+  :root {
+    --coral: #ff4b44;
+    --coral-2: #ff7a59;
+    --ink: #0a0e1a;
+    --card: #111726;
+    --card-2: #0b101c;
+    --line: rgba(255, 255, 255, .13);
+    --text: #f5f6f8;
+    --muted: #9aa3b5;
+    --scale: 1;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #0f0f0f;
+    color: var(--text);
+    font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.clear { background: transparent; }
+
+  #wrap {
+    display: flex; gap: 16px; align-items: flex-end;
+    padding: 16px;
+    transform: scale(var(--scale)); transform-origin: top left;
+  }
+  #wrap.column { flex-direction: column; align-items: flex-start; }
+
+  .card {
+    width: 300px; border-radius: 14px; overflow: hidden;
+    background: linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%);
+    border: 1px solid rgba(255, 255, 255, .07);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .45);
+    animation: cardIn .45s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  .card:nth-child(2) { animation-delay: .08s; }
+
+  .league {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 14px 0;
+    font: 800 11px/1 "Barlow Condensed", sans-serif; letter-spacing: .16em;
+    color: var(--coral);
+  }
+  .league .round { color: var(--muted); letter-spacing: .1em; }
+
+  .head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px 10px;
+  }
+  .crest {
+    flex: 0 0 auto; min-width: 42px; height: 26px; padding: 0 7px; border-radius: 6px;
+    display: grid; place-items: center;
+    font: 800 15px/1 "Barlow Condensed", sans-serif; letter-spacing: .04em;
+  }
+  .team { flex: 1 1 auto; min-width: 0; font-weight: 900; font-size: 17px; letter-spacing: -.01em;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .form {
+    flex: 0 0 auto; padding: 3px 8px 2px; border-radius: 5px;
+    background: #fff; color: var(--ink);
+    font: 800 14px/1.1 "Barlow Condensed", sans-serif; letter-spacing: .03em;
+  }
+  .bar { height: 3px; margin: 0 14px; border-radius: 2px;
+         background: linear-gradient(90deg, var(--coral), var(--coral-2) 60%, transparent); }
+
+  .pitch {
+    position: relative; margin: 12px; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden;
+    background:
+      repeating-linear-gradient(180deg, rgba(255,255,255,.028) 0 12.5%, transparent 12.5% 25%),
+      radial-gradient(120% 80% at 50% 50%, #18213a 0%, #0e1424 100%);
+  }
+  .pitch > svg.lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .p {
+    position: absolute; width: 25%;
+    display: flex; flex-direction: column; align-items: center;
+    transform: translate(-50%, -50%);
+    animation: pIn .35s ease-out both;
+  }
+  .p svg { width: 36px; height: 36px; filter: drop-shadow(0 3px 4px rgba(0,0,0,.5)); }
+  .p .nm {
+    max-width: 100%; margin-top: 2px; padding: 1px 5px; border-radius: 4px;
+    background: rgba(5, 8, 16, .72);
+    font-size: 11.5px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .warn { margin: -4px 12px 12px; padding: 6px 9px; border-radius: 6px;
+          background: rgba(255, 75, 68, .15); color: #ffb3ae; font-size: 12px; }
+
+  @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes pIn { from { opacity: 0; transform: translate(-50%, -30%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+  @media (prefers-reduced-motion: reduce) { .card, .p { animation: none; } }
+</style>
+</head>
+<body>
+  <div id="wrap"></div>
+
+<script>
+(() => {
+  const qs = new URLSearchParams(location.search);
+  const wrap = document.getElementById("wrap");
+  const SVG = "http://www.w3.org/2000/svg";
+
+  if (qs.get("transparent") === "1") document.body.classList.add("clear");
+  if (qs.get("dir") === "column") wrap.classList.add("column");
+  if (qs.get("scale")) document.documentElement.style.setProperty("--scale", String(parseFloat(qs.get("scale")) || 1));
+  const SIDES = ["home", "away"].includes(qs.get("side")) ? [qs.get("side")] : ["home", "away"];
+
+  const DEMO = {
+    league: "LALIGA", round: "JORNADA 6",
+    home: { name: "비야레알", short: "VIL", formation: "4-4-2",
+            kit: { base: "#FFE11A", number: "#12306B" }, gk_kit: { base: "#1FB86A", number: "#FFFFFF" },
+            players: [[1, "루이스 주니오르"], [23, "카르도나"], [4, "마린"], [12, "베이가"], [8, "포이스"],
+                      [20, "모레이로"], [16, "파티"], [18, "게예"], [19, "페페"], [22, "아요세"], [9, "미카우타제"]] },
+    away: { name: "바르셀로나", short: "BAR", formation: "4-3-3",
+            kit: { base: "#A50044", stripe: "#004D98", number: "#FFD23F" }, gk_kit: { base: "#F2F2F2", number: "#1A1A1A" },
+            players: [[13, "주안 가르시아"], [3, "발데"], [5, "쿠바르시"], [4, "아라우호"], [23, "쿤데"],
+                      [8, "페드리"], [21, "더 용"], [16, "페르민"], [11, "하피냐"], [9, "레반도프스키"], [10, "야말"]] },
+  };
+
+  function el(tag, cls, text) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function svg(tag, attrs, parent) {
+    const e = document.createElementNS(SVG, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.append(e);
+    return e;
+  }
+
+  function pitchLines() {
+    const s = svg("svg", { class: "lines", viewBox: "0 0 300 400", preserveAspectRatio: "none" });
+    const g = svg("g", { fill: "none", stroke: "rgba(255,255,255,.14)", "stroke-width": "1.5" }, s);
+    svg("rect", { x: 8, y: 8, width: 284, height: 384, rx: 2 }, g);
+    svg("line", { x1: 8, y1: 200, x2: 292, y2: 200 }, g);
+    svg("circle", { cx: 150, cy: 200, r: 38 }, g);
+    svg("rect", { x: 80, y: 8, width: 140, height: 56 }, g);
+    svg("rect", { x: 116, y: 8, width: 68, height: 20 }, g);
+    svg("rect", { x: 80, y: 336, width: 140, height: 56 }, g);
+    svg("rect", { x: 116, y: 372, width: 68, height: 20 }, g);
+    svg("path", { d: "M122 64 A30 30 0 0 0 178 64" }, g);
+    svg("path", { d: "M122 336 A30 30 0 0 1 178 336" }, g);
+    svg("circle", { cx: 150, cy: 200, r: 2, fill: "rgba(255,255,255,.2)" }, g);
+    return s;
+  }
+
+  let uid = 0;
+  function jersey(num, kit) {
+    const id = "k" + (uid++);
+    const s = svg("svg", { viewBox: "0 0 40 40", "aria-hidden": "true" });
+    const shape = "M13 3 L7.5 5 L1.5 11.5 L6 17.5 L10 15 L10 37 L30 37 L30 15 L34 17.5 L38.5 11.5 L32.5 5 L27 3 C25 6 15 6 13 3 Z";
+    const clip = svg("clipPath", { id }, svg("defs", {}, s));
+    svg("path", { d: shape }, clip);
+    const body = svg("g", { "clip-path": `url(#${id})` }, s);
+    svg("rect", { x: 0, y: 0, width: 40, height: 40, fill: kit.base || "#ffffff" }, body);
+    if (kit.stripe) for (let x = 6; x < 40; x += 8) svg("rect", { x, y: 0, width: 4, height: 40, fill: kit.stripe }, body);
+    svg("path", { d: shape, fill: "none", stroke: "rgba(0,0,0,.35)", "stroke-width": "1" }, s);
+    const t = svg("text", {
+      x: 20, y: 29, "text-anchor": "middle",
+      "font-family": "Barlow Condensed, sans-serif", "font-weight": "800", "font-size": "17",
+      fill: kit.number || "#111", stroke: "rgba(0,0,0,.25)", "stroke-width": ".6", "paint-order": "stroke",
+    }, s);
+    t.textContent = num;
+    return s;
+  }
+
+  function slots(formation, count) {
+    const rows = [1, ...String(formation || "").split("-").map((n) => parseInt(n, 10)).filter((n) => n > 0)];
+    const out = [];
+    const top = 12, bottom = 89;
+    rows.forEach((n, r) => {
+      const y = bottom - (rows.length > 1 ? (r * (bottom - top)) / (rows.length - 1) : 0);
+      const w = Math.min(78, (n - 1) * 25);
+      for (let i = 0; i < n; i++) out.push({ x: n > 1 ? 50 - w / 2 + (i * w) / (n - 1) : 50, y, gk: r === 0 });
+    });
+    return { list: out.slice(0, count), total: out.length };
+  }
+
+  function card(data, team) {
+    const c = el("section", "card");
+    const kit = team.kit || {};
+    const league = el("div", "league");
+    league.append(el("span", "", data.league || ""), el("span", "round", data.round || ""));
+    const head = el("div", "head");
+    const crest = el("div", "crest", team.short || "");
+    crest.style.background = kit.base || "#fff";
+    crest.style.color = kit.number || "#111";
+    if (kit.stripe) crest.style.background = `linear-gradient(90deg, ${kit.base} 0 50%, ${kit.stripe} 50% 100%)`;
+    head.append(crest, el("div", "team", team.name || ""), el("div", "form", team.formation || ""));
+    c.append(league, head, el("div", "bar"));
+
+    const pitch = el("div", "pitch");
+    pitch.append(pitchLines());
+    const players = Array.isArray(team.players) ? team.players : [];
+    const { list, total } = slots(team.formation, players.length);
+    list.forEach((pos, i) => {
+      const [num, name] = players[i];
+      const p = el("div", "p");
+      p.style.left = pos.x + "%";
+      p.style.top = pos.y + "%";
+      p.style.animationDelay = (0.15 + i * 0.03) + "s";
+      p.append(jersey(num, pos.gk ? (team.gk_kit || kit) : kit), el("div", "nm", name));
+      pitch.append(p);
+    });
+    c.append(pitch);
+    if (players.length && players.length !== total) {
+      c.append(el("div", "warn", `선수 ${players.length}명 · 포메이션 ${team.formation || "?"} 은(는) ${total}명 — lineup.json 확인`));
+    }
+    return c;
+  }
+
+  function fitNames() {
+    for (const n of wrap.querySelectorAll(".nm")) {
+      let fs = 11.5;
+      while (n.scrollWidth > n.clientWidth && fs > 8.5) { fs -= 0.5; n.style.fontSize = fs + "px"; }
+    }
+  }
+
+  function render(data) {
+    wrap.replaceChildren(...SIDES.filter((s) => data[s]).map((s) => card(data, data[s])));
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(fitNames);
+  }
+
+  if (location.protocol === "file:") { render(DEMO); return; }
+
+  let last = "";
+  async function poll() {
+    try {
+      const r = await fetch("/lineup.json", { cache: "no-store" });
+      const text = await r.text();
+      if (r.ok && text !== last) { render(JSON.parse(text)); last = text; }
+    } catch (e) {
+      console.warn("lineup.json 읽기 실패:", e);
+    }
+    setTimeout(poll, 3000);
+  }
+  poll();
+})();
+</script>
+</body>
+</html>
